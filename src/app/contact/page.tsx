@@ -109,9 +109,7 @@ export default function ContactPage() {
                   
                   <form 
                     name="contact" 
-                    method="POST" 
-                    data-netlify="true"
-                    data-netlify-honeypot="bot-field"
+                    method="POST"
                     className="space-y-6"
                   >
                     {/* Netlify Form Hidden Fields */}

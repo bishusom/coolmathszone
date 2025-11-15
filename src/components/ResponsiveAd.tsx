@@ -3,6 +3,13 @@
 
 import { useEffect, useState } from 'react';
 
+// Add this type declaration at the top
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+  }
+}
+
 interface ResponsiveAdProps {
   position: 'hero' | 'content' | 'sidebar' | 'footer';
   className?: string;
@@ -14,10 +21,18 @@ export default function ResponsiveAd({ position, className = '' }: ResponsiveAdP
   useEffect(() => {
     const loadAd = () => {
       try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        setAdLoaded(true);
+        // Check if adsbygoogle is available
+        if (typeof window !== 'undefined' && window.adsbygoogle) {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          setAdLoaded(true);
+        } else {
+          // Retry if not available yet
+          setTimeout(loadAd, 500);
+        }
       } catch (error) {
         console.log('AdSense error:', error);
+        // Retry on error
+        setTimeout(loadAd, 1000);
       }
     };
 
@@ -62,7 +77,6 @@ export default function ResponsiveAd({ position, className = '' }: ResponsiveAdP
 }
 
 function getAdSlot(position: string): string {
-  // You'll need to replace these with your actual AdSense slot IDs
   const slots: { [key: string]: string } = {
     hero: '9516408306',
     content: '1592852108',

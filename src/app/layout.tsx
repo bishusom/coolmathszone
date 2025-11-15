@@ -98,6 +98,14 @@ export default function RootLayout({
         >
           {JSON.stringify(structuredData)}
         </Script>
+
+        {/* Google AdSense Script */}
+        <Script
+          id="adsense-init"
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4386714040098164"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

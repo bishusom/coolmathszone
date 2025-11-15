@@ -1,0 +1,417 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  
+  /* Custom magical colors */
+  --color-magic-purple: #8B5CF6;
+  --color-electric-blue: #06B6D4;
+  --color-neon-pink: #EC4899;
+  --color-sunshine: #F59E0B;
+  --color-mint: #10B981;
+  --color-bubblegum: #F472B6;
+  --color-galaxy: #4F46E5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Magical animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 2s ease-in-out infinite;
+}
+
+/* Custom gradient backgrounds */
+.gradient-rainbow {
+  background: linear-gradient(135deg, 
+    #8B5CF6 0%, 
+    #EC4899 25%, 
+    #F59E0B 50%, 
+    #10B981 75%, 
+    #06B6D4 100%
+  );
+}
+
+.gradient-galaxy {
+  background: linear-gradient(135deg, 
+    #4F46E5 0%, 
+    #7C3AED 33%, 
+    #EC4899 66%, 
+    #F59E0B 100%
+  );
+}
+
+.gradient-ocean {
+  background: linear-gradient(135deg, 
+    #06B6D4 0%, 
+    #3B82F6 50%, 
+    #8B5CF6 100%
+  );
+}
+
+.gradient-ocean-blue {
+  background: linear-gradient(135deg, 
+    #CCEFEA 0%,
+    #06B6D4 33%, 
+    #3B82F6 50%, 
+    #8B5CF6 100%
+  );
+}
+
+/* Magical Kid-Friendly Gradients */
+.gradient-cotton-candy {
+  background: linear-gradient(135deg, 
+    #FF9A9E 0%, 
+    #FAD0C4 50%, 
+    #FBC2EB 100%
+  );
+}
+
+.gradient-unicorn {
+  background: linear-gradient(135deg, 
+    #A3BFFA 0%, 
+    #E9D5FF 33%, 
+    #FBCFE8 66%, 
+    #FEF3C7 100%
+  );
+}
+
+.gradient-rainbow-blast {
+  background: linear-gradient(135deg, 
+    #FF6B6B 0%, 
+    #FFD93D 20%, 
+    #6BCF7F 40%, 
+    #4D96FF 60%, 
+    #9B5DE5 80%, 
+    #F15BB5 100%
+  );
+}
+
+.gradient-space-adventure {
+  background: linear-gradient(135deg, 
+    #667EEA 0%, 
+    #764BA2 25%, 
+    #F093FB 50%, 
+    #F5576C 75%, 
+    #4FACFE 100%
+  );
+}
+
+.gradient-tropical-splash {
+  background: linear-gradient(135deg, 
+    #43E97B 0%, 
+    #38F9D7 33%, 
+    #FA709A 66%, 
+    #FEE140 100%
+  );
+}
+
+.gradient-bubblegum-pop {
+  background: linear-gradient(135deg, 
+    #FF9A8B 0%, 
+    #FF6A88 25%, 
+    #FF99AC 50%, 
+    #FFB6C1 75%, 
+    #FFDEE9 100%
+  );
+}
+
+.gradient-neon-dream {
+  background: linear-gradient(135deg, 
+    #FF0080 0%, 
+    #FF8C00 25%, 
+    #40E0D0 50%, 
+    #FF0080 75%, 
+    #FF8C00 100%
+  );
+}
+
+.gradient-forest-magic {
+  background: linear-gradient(135deg, 
+    #0BA360 0%, 
+    #3CBA92 25%, 
+    #30DD8A 50%, 
+    #2BB673 75%, 
+    #0BA360 100%
+  );
+}
+
+.gradient-sunset-safari {
+  background: linear-gradient(135deg, 
+    #FFE259 0%, 
+    #FFA751 33%, 
+    #FF7E5F 66%, 
+    #FF6B6B 100%
+  );
+}
+
+.gradient-ice-cream-party {
+  background: linear-gradient(135deg, 
+    #74EBD5 0%, 
+    #9FACE6 33%, 
+    #D4A5FF 66%, 
+    #FFB6C1 100%
+  );
+}
+
+.gradient-dragon-scale {
+  background: linear-gradient(135deg, 
+    #00DBDE 0%, 
+    #FC00FF 50%, 
+    #00DBDE 100%
+  );
+}
+
+.gradient-mermaid-lagoon {
+  background: linear-gradient(135deg, 
+    #0093E9 0%, 
+    #80D0C7 50%, 
+    #0093E9 100%
+  );
+}
+
+.gradient-galaxy-quest {
+  background: linear-gradient(135deg, 
+    #3A1C71 0%, 
+    #D76D77 50%, 
+    #FFAF7B 100%
+  );
+}
+
+.gradient-candy-land {
+  background: linear-gradient(135deg, 
+    #FF61D2 0%, 
+    #FE9090 25%, 
+    #FFC145 50%, 
+    #6DE195 75%, 
+    #72EDF2 100%
+  );
+}
+
+.gradient-superhero {
+  background: linear-gradient(135deg, 
+    #FF0000 0%, 
+    #FF7F00 20%, 
+    #FFFF00 40%, 
+    #00FF00 60%, 
+    #0000FF 80%, 
+    #8B00FF 100%
+  );
+}
+
+.gradient-ocean-waves {
+  background: linear-gradient(135deg, 
+    #4facfe 0%, 
+    #00f2fe 33%, 
+    #43e97b 66%, 
+    #38f9d7 100%
+  );
+}
+
+.gradient-fireworks {
+  background: linear-gradient(135deg, 
+    #FA8BFF 0%, 
+    #2BD2FF 25%, 
+    #2BFF88 50%, 
+    #FFE53B 75%, 
+    #FF2525 100%
+  );
+}
+
+.gradient-pastel-dream {
+  background: linear-gradient(135deg, 
+    #FFD1DC 0%, 
+    #DFB2F4 25%, 
+    #55D6C2 50%, 
+    #FDFD96 75%, 
+    #FFB347 100%
+  );
+}
+
+.gradient-neon-arcade {
+  background: linear-gradient(135deg, 
+    #FF00FF 0%, 
+    #00FFFF 25%, 
+    #00FF00 50%, 
+    #FFFF00 75%, 
+    #FF00FF 100%
+  );
+}
+
+.gradient-jungle-explorer {
+  background: linear-gradient(135deg, 
+    #00B712 0%, 
+    #5AFF15 33%, 
+    #B7FF00 66%, 
+    #FFFF00 100%
+  );
+}
+
+.gradient-arctic-adventure {
+  background: linear-gradient(135deg, 
+    #00B4DB 0%, 
+    #0083B0 25%, 
+    #667EEA 50%, 
+    #764BA2 75%, 
+    #F093FB 100%
+  );
+}
+
+.gradient-arctic-adventure {
+  background: linear-gradient(135deg,
+    #c5f4ff 0%,
+    #00B4DB 25%, 
+    #4389A2 50%, 
+    #5C258D 100%
+  );  
+}
+
+/* Text gradients for headings */
+.text-gradient-ocean {
+  background: linear-gradient(135deg, 
+    #00B4DB 0%, 
+    #0083B0 25%, 
+    #667EEA 50%, 
+    #764BA2 75%, 
+    #F093FB 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-neon {
+      background: linear-gradient(to right,
+      #daf4fb, 
+      #b0eefe, 
+      #afd3ff
+    ); /* Example blue gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, 
+    #FFD700 0%, 
+    #FFA500 50%, 
+    #FF8C00 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Border gradients */
+.border-gradient-rainbow {
+  border: 4px solid;
+  border-image: linear-gradient(135deg, 
+    #FF6B6B 0%, 
+    #FFD93D 20%, 
+    #6BCF7F 40%, 
+    #4D96FF 60%, 
+    #9B5DE5 80%, 
+    #F15BB5 100%
+  ) 1;
+}
+
+/* Shadow gradients */
+.shadow-rainbow {
+  box-shadow: 
+    0 0 20px rgba(255, 107, 107, 0.4),
+    0 0 40px rgba(255, 217, 61, 0.3),
+    0 0 60px rgba(107, 207, 127, 0.2),
+    0 0 80px rgba(77, 150, 255, 0.1);
+}
+
+/* Animation for gradient cycling */
+@keyframes cycle-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-animated {
+  background: linear-gradient(-45deg, 
+    #FF6B6B, 
+    #FFD93D, 
+    #6BCF7F, 
+    #4D96FF, 
+    #9B5DE5, 
+    #F15BB5
+  );
+  background-size: 400% 400%;
+  animation: cycle-gradient 15s ease infinite;
+}
+
+/* Add to your globals.css */
+@keyframes celebrate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes gentle-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.animate-celebrate {
+  animation: celebrate 0.6s ease-in-out;
+}
+
+.animate-gentle-shake {
+  animation: gentle-shake 0.4s ease-in-out;
+}
+
+/* Success and error states */
+.feedback-success {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  border-color: #28a745;
+}
+
+.feedback-error {
+  background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+  border-color: #dc3545;
+}

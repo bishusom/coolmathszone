@@ -17,6 +17,20 @@
   NODE_ENV = "development"
   NEXT_PUBLIC_SITE_URL = "$DEPLOY_PRIME_URL"
 
+# Required for Next.js Runtime v5 with Netlify Forms
+[functions]
+  node_bundler = "esbuild"
+
+# Plugin configuration for Next.js v5 with forms support
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# API routes proxy for forms
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
 # Redirects configuration
 [[redirects]]
   from = "/sitemap.xml"
@@ -96,7 +110,3 @@
   for = "/*.ico"
   [headers.values]
     Cache-Control = "public, max-age=86400"
-
-# Plugin configuration (optional but recommended for Next.js)
-[[plugins]]
-  package = "@netlify/plugin-nextjs"

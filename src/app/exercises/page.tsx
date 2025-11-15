@@ -242,7 +242,7 @@ export default function ExercisesPage() {
             </div>
             <div>
               <div className="text-3xl font-bold text-white">{gradeLevels.length}</div>
-              <div className="text-white/70 text-sm">Grade Levels</div>
+              <div className="text-white/70 text-sm">Grade Level</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-white">{allCategories.length}</div>

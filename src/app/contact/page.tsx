@@ -1,5 +1,8 @@
+'use client';
+
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { useState } from 'react';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
 
 export const metadata: Metadata = {
@@ -8,6 +11,52 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('loading');
+    
+    const formData = new FormData(e.currentTarget);
+    
+    try {
+      const response = await fetch('https://formspree.io/f/xnnlbqja', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        setStatus('success');
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      setStatus('error');
+    }
+  };
+
+  if (status === 'success') {
+    return (
+      <div className="bg-green-500/20 border border-green-400 rounded-2xl p-8 text-center">
+        <div className="text-4xl mb-4">🎉</div>
+        <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
+        <p className="text-white/70">
+          Thanks for reaching out! We'll get back to you within 24 hours.
+        </p>
+        <button
+          onClick={() => setStatus('idle')}
+          className="mt-4 bg-green-500 text-white px-6 py-2 rounded-xl hover:bg-green-400 transition-colors"
+        >
+          Send Another Message
+        </button>
+      </div>
+    );
+  }
+
   return (
     <PageContainer>
       {/* Hero Section */}
@@ -48,172 +97,101 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="py-16 bg-gradient-to-br from-blue-400 to-cyan-500">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Contact Info */}
-              <div className="lg:col-span-1">
-                <ContentCard className="p-6 h-full">
-                  <h3 className="text-2xl font-bold text-white mb-6">Get in Touch</h3>
-                  
-                  <div className="space-y-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-10 h-10 bg-cyan-400 rounded-full flex items-center justify-center text-white text-lg">
-                        👨‍👦
-                      </div>
-                      <div>
-                        <h4 className="text-white font-semibold">The Dad & Son Team</h4>
-                        <p className="text-white/70 text-sm">Bishu & Shubhang Som</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-4">
-                      <div className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center text-white text-lg">
-                        ⚡
-                      </div>
-                      <div>
-                        <h4 className="text-white font-semibold">Quick Response</h4>
-                        <p className="text-white/70 text-sm">We reply within 24 hours</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-4">
-                      <div className="w-10 h-10 bg-teal-400 rounded-full flex items-center justify-center text-white text-lg">
-                        💡
-                      </div>
-                      <div>
-                        <h4 className="text-white font-semibold">Your Ideas Matter</h4>
-                        <p className="text-white/70 text-sm">Suggest new features or games</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 pt-6 border-t border-white/20">
-                    <h4 className="text-white font-semibold mb-3">Common Topics</h4>
-                    <ul className="text-white/70 text-sm space-y-2">
-                      <li>• Bug reports</li>
-                      <li>• Feature requests</li>
-                      <li>• Math questions</li>
-                      <li>• Partnership ideas</li>
-                      <li>• Just saying hello! 👋</li>
-                    </ul>
-                  </div>
-                </ContentCard>
+      <div className="lg:col-span-2">
+        <ContentCard className="p-8">
+          <h3 className="text-2xl font-bold text-white mb-6">Send us a Message</h3>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="name" className="block text-white font-semibold mb-2">
+                  Your Name *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-cyan-300 focus:bg-white/15 transition-all duration-300"
+                  placeholder="Enter your name"
+                />
               </div>
-
-              {/* Contact Form */}
-              <div className="lg:col-span-2">
-                <ContentCard className="p-8">
-                  <h3 className="text-2xl font-bold text-white mb-6">Send us a Message</h3>
-                  
-                  <form 
-                    name="contact" 
-                    method="POST"
-                    className="space-y-6"
-                  >
-                    {/* Netlify Form Hidden Fields */}
-                    <input type="hidden" name="form-name" value="contact" />
-                    <p className="hidden">
-                      <label>
-                        Don't fill this out if you're human: <input name="bot-field" />
-                      </label>
-                    </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label htmlFor="name" className="block text-white font-semibold mb-2">
-                          Your Name *
-                        </label>
-                        <input
-                          type="text"
-                          id="name"
-                          name="name"
-                          required
-                          className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-cyan-300 focus:bg-white/15 transition-all duration-300"
-                          placeholder="Enter your name"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="email" className="block text-white font-semibold mb-2">
-                          Email Address *
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          required
-                          className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-cyan-300 focus:bg-white/15 transition-all duration-300"
-                          placeholder="your@email.com"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="subject" className="block text-white font-semibold mb-2">
-                        Subject *
-                      </label>
-                      <select
-                        id="subject"
-                        name="subject"
-                        required
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white focus:outline-none focus:border-cyan-300 focus:bg-white/15 transition-all duration-300"
-                      >
-                        <option value="" className="text-gray-800">Select a topic</option>
-                        <option value="bug-report" className="text-gray-800">🐛 Bug Report</option>
-                        <option value="feature-request" className="text-gray-800">💡 Feature Request</option>
-                        <option value="math-question" className="text-gray-800">🔢 Math Question</option>
-                        <option value="feedback" className="text-gray-800">🌟 General Feedback</option>
-                        <option value="partnership" className="text-gray-800">🤝 Partnership</option>
-                        <option value="other" className="text-gray-800">❓ Other</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="block text-white font-semibold mb-2">
-                        Message *
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={6}
-                        required
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-cyan-300 focus:bg-white/15 transition-all duration-300 resize-none"
-                        placeholder="Tell us what's on your mind..."
-                      ></textarea>
-                    </div>
-
-                    <div className="flex items-center space-x-4">
-                      <input
-                        type="checkbox"
-                        id="newsletter"
-                        name="newsletter"
-                        className="w-4 h-4 text-cyan-400 bg-white/10 border-white/20 rounded focus:ring-cyan-300 focus:ring-2"
-                      />
-                      <label htmlFor="newsletter" className="text-white/70 text-sm">
-                        Send me updates about new features and math games
-                      </label>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4 justify-between items-center pt-4">
-                      <p className="text-white/60 text-sm">
-                        * Required fields
-                      </p>
-                      <button
-                        type="submit"
-                        className="bg-cyan-400 text-blue-800 font-bold px-8 py-4 rounded-2xl hover:bg-cyan-300 transition-all duration-300 transform hover:scale-105 min-w-[200px]"
-                      >
-                        🐚 Send Message
-                      </button>
-                    </div>
-                  </form>
-                </ContentCard>
+              
+              <div>
+                <label htmlFor="email" className="block text-white font-semibold mb-2">
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-cyan-300 focus:bg-white/15 transition-all duration-300"
+                  placeholder="your@email.com"
+                />
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+
+            <div>
+              <label htmlFor="subject" className="block text-white font-semibold mb-2">
+                Subject *
+              </label>
+              <select
+                id="subject"
+                name="subject"
+                required
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white focus:outline-none focus:border-cyan-300 focus:bg-white/15 transition-all duration-300"
+              >
+                <option value="" className="text-gray-800">Select a topic</option>
+                <option value="bug-report" className="text-gray-800">🐛 Bug Report</option>
+                <option value="feature-request" className="text-gray-800">💡 Feature Request</option>
+                <option value="math-question" className="text-gray-800">🔢 Math Question</option>
+                <option value="feedback" className="text-gray-800">🌟 General Feedback</option>
+                <option value="partnership" className="text-gray-800">🤝 Partnership</option>
+                <option value="other" className="text-gray-800">❓ Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="message" className="block text-white font-semibold mb-2">
+                Message *
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={6}
+                required
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:border-cyan-300 focus:bg-white/15 transition-all duration-300 resize-none"
+                placeholder="Tell us what's on your mind..."
+              ></textarea>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <input
+                type="checkbox"
+                id="newsletter"
+                name="newsletter"
+                className="w-4 h-4 text-cyan-400 bg-white/10 border-white/20 rounded focus:ring-cyan-300 focus:ring-2"
+              />
+              <label htmlFor="newsletter" className="text-white/70 text-sm">
+                Send me updates about new features and math games
+              </label>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-center pt-4">
+              <p className="text-white/60 text-sm">
+                * Required fields
+              </p>
+              <button
+                type="submit"
+                className="bg-cyan-400 text-blue-800 font-bold px-8 py-4 rounded-2xl hover:bg-cyan-300 transition-all duration-300 transform hover:scale-105 min-w-[200px]"
+              >
+                🐚 Send Message
+              </button>
+            </div>
+          </form>
+        </ContentCard>
+      </div>
 
       {/* FAQ Quick Links */}
       <section className="py-16 bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 text-white">

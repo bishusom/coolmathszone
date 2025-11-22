@@ -1,17 +1,8 @@
 'use client';
 
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
-
-export const metadata: Metadata = {
-  title: 'Contact Us | CoolMathsZone',
-  description: 'Get in touch with the CoolMathsZone team - Bishu Som and Shubhang Som. We love hearing from our users!',
-  alternates: {
-    canonical: 'https://coolmathszone.com/contact'
-  }
-};
 
 export default function ContactPage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');

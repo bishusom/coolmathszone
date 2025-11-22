@@ -132,6 +132,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${categoryName} Exercises | CoolMathsZone`,
     description: `Math exercises for ${categoryName} across all grade levels. ${categoryTopics.length} interactive exercises available for ${gradeLevelsCount} grade levels.`,
+    alternates: {
+      canonical: `https://coolmathszone.com/exercises/${categoryName.toLowerCase()}`
+    },
     other: {
       'script:ld+json': JSON.stringify(faqSchema)
     }
@@ -306,10 +309,10 @@ export default async function CategoryPage({ params }: PageProps) {
             {getRelatedCategories(actualCategory).map(relatedCategory => (
               <Link 
                 key={relatedCategory}
-                href={`/exercises/category/${relatedCategory.toLowerCase().replace(/\s+/g, '-')}`}
+                href={`/exercises/category/${relatedCategory}`}
                 className="bg-white/10 text-white/80 hover:text-white hover:bg-white/20 px-3 py-1 rounded-full text-sm transition-colors"
               >
-                {relatedCategory}
+                {getCategoryDisplayName(relatedCategory)}
               </Link>
             ))}
           </div>
@@ -344,29 +347,37 @@ function getCategoryEmoji(category: string): string {
   return emojiMap[category] || '📚';
 }
 
-// Helper function to get related categories
+// Helper function to get related categories (returns URL-friendly slugs)
 function getRelatedCategories(category: string): string[] {
   const relatedMap: { [key: string]: string[] } = {
-    'multiplication': ['Division', 'Arithmetic', 'Numbers'],
-    'division': ['Multiplication', 'Arithmetic', 'Fractions'],
-    'fractions': ['Decimals', 'Ratios', 'Algebra'],
-    'algebra': ['Arithmetic', 'Problem-Solving', 'Numbers'],
-    'geometry': ['Measurement', 'Shapes', 'Spatial Reasoning'],
-    'money': ['Commercial Math', 'Decimals', 'Arithmetic'],
-    'numbers': ['Arithmetic', 'Algebra', 'Place Value'],
-    'arithmetic': ['Numbers', 'Problem-Solving', 'Algebra'],
-    'decimals': ['Fractions', 'Money', 'Numbers'],
-    'time': ['Measurement', 'Numbers', 'Problem-Solving'],
-    'measurement': ['Geometry', 'Numbers', 'Real-World Math'],
-    'data': ['Statistics', 'Probability', 'Analysis'],
-    'patterns': ['Logic', 'Algebra', 'Sequences'],
-    'logic': ['Problem-Solving', 'Patterns', 'Reasoning'],
-    'ratios': ['Fractions', 'Proportions', 'Algebra'],
-    'commercial-math': ['Money', 'Percentages', 'Real-World Math'],
-    'problem-solving': ['Logic', 'Arithmetic', 'Real-World Applications']
+    'multiplication': ['division', 'arithmetic', 'numbers'],
+    'division': ['multiplication', 'arithmetic', 'fractions'],
+    'fractions': ['decimals', 'ratios', 'algebra'],
+    'algebra': ['arithmetic', 'problem-solving', 'numbers'],
+    'geometry': ['measurement', 'patterns', 'logic'],
+    'money': ['commercial-math', 'decimals', 'arithmetic'],
+    'numbers': ['arithmetic', 'algebra', 'measurement'],
+    'arithmetic': ['numbers', 'problem-solving', 'algebra'],
+    'decimals': ['fractions', 'money', 'numbers'],
+    'time': ['measurement', 'money', 'problem-solving'],
+    'measurement': ['geometry', 'numbers', 'data'],
+    'data': ['measurement', 'logic', 'patterns'],
+    'patterns': ['logic', 'algebra', 'geometry'],
+    'logic': ['problem-solving', 'patterns', 'data'],
+    'ratios': ['fractions', 'algebra', 'commercial-math'],
+    'commercial-math': ['money', 'ratios', 'decimals'],
+    'problem-solving': ['logic', 'arithmetic', 'algebra']
   };
   
-  return relatedMap[category] || ['Arithmetic', 'Numbers', 'Problem-Solving'];
+  return relatedMap[category] || ['arithmetic', 'numbers', 'problem-solving'];
+}
+
+// Helper function to convert URL slug to display name
+function getCategoryDisplayName(slug: string): string {
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 // Helper function to get category description for FAQ

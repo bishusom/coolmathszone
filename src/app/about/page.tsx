@@ -5,6 +5,9 @@ import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageCon
 export const metadata: Metadata = {
   title: 'About Us | CoolMathsZone',
   description: 'Meet the father-son duo behind CoolMathsZone - Bishu Som (tech developer) and Shubhang Som (math wiz) creating fun math lessons for kids',
+  alternates: {
+    canonical: 'https://coolmathszone.com/about',
+  },
 };
 
 export default function AboutPage() {

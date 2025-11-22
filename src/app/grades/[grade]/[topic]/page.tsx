@@ -86,6 +86,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${topicData.title} - ${gradeLevel.title} | CoolMathsZone`,
     description: topicData.description || `Practice ${topicData.title} with interactive exercises for ${gradeLevel.title} students.`,
+    alternates: {
+      canonical: `https://coolmathszone.com/grades/${gradeLevel.id}/${topicData.id}`,
+    },
     other: {
       'script:ld+json': JSON.stringify(faqSchema)
     }

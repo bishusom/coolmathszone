@@ -6,6 +6,9 @@ import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageCon
 export const metadata: Metadata = {
   title: 'Parent\'s Guide to Cool Maths Zone | Maximize Math Learning',
   description: 'Discover how to get the most educational value from Cool Maths Zone games for your child\'s math development.',
+  alternates: {
+    canonical: 'https://coolmathszone.com/parents-guide'
+  }
 };
 
 export default function ParentsGuidePage() {

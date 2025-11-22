@@ -10,7 +10,6 @@ import { getAllGradeLevels } from '@/utils/gradeHelpers';
 import { sortGrades, SortOrder } from '@/utils/sortHelpers';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
 
-
 export default function AllGradesPage() {
    const [sortOrder, setSortOrder] = useState<SortOrder>('age-asc');
      const allGrades = getAllGradeLevels();

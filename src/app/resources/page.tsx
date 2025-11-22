@@ -2,62 +2,15 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
+import { resourceCategories } from '@/data/resources';
 
 export const metadata: Metadata = {
   title: 'Math Resources & Strategies | CoolMathsZone',
-  description: 'Explore helpful math strategies, tips, and learning resources for all grade levels.'
-};
-
-const resourceCategories = [
-  {
-    id: 'addition-strategies',
-    title: 'Addition Strategies',
-    emoji: '➕',
-    description: 'Learn different methods to master addition',
-    color: 'from-green-500 to-emerald-500',
-    topics: ['Counting On', 'Using Objects', 'Number Line', 'Doubles Facts', 'Making Ten']
-  },
-  {
-    id: 'subtraction-strategies',
-    title: 'Subtraction Strategies',
-    emoji: '➖',
-    description: 'Various techniques for subtraction problems',
-    color: 'from-blue-500 to-cyan-500',
-    topics: ['Counting Back', 'Using Objects', 'Number Line', 'Related Facts', 'Subtracting Zero']
-  },
-  {
-    id: 'multiplication-strategies',
-    title: 'Multiplication Strategies',
-    emoji: '✖️',
-    description: 'Master multiplication with fun methods',
-    color: 'from-purple-500 to-pink-500',
-    topics: ['Repeated Addition', 'Arrays', 'Skip Counting', 'Doubling', 'Zero Property']
-  },
-  {
-    id: 'division-strategies',
-    title: 'Division Strategies',
-    emoji: '➗',
-    description: 'Learn division through different approaches',
-    color: 'from-orange-500 to-red-500',
-    topics: ['Equal Sharing', 'Repeated Subtraction', 'Multiplication Facts', 'Arrays', 'Dividing by One']
-  },
-  {
-    id: 'problem-solving',
-    title: 'Problem Solving',
-    emoji: '🤔',
-    description: 'Strategies for tackling word problems',
-    color: 'from-yellow-500 to-amber-500',
-    topics: ['Understand the Problem', 'Make a Plan', 'Solve', 'Check Your Work']
-  },
-  {
-    id: 'study-tips',
-    title: 'Study Tips',
-    emoji: '📚',
-    description: 'Effective ways to learn and remember math',
-    color: 'from-indigo-500 to-purple-500',
-    topics: ['Daily Practice', 'Flashcards', 'Math Games', 'Real-World Applications']
+  description: 'Explore helpful math strategies, tips, multiplication tables, and learning resources for all grade levels.',
+  alternates: {
+    canonical: 'https://coolmathszone.com/resources'
   }
-];
+};
 
 export default function ResourcesPage() {
   return (
@@ -80,7 +33,7 @@ export default function ResourcesPage() {
           </div>
           
           <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-            Discover helpful strategies, tips, and techniques to master math concepts at every level.
+            Discover helpful strategies, tips, multiplication tables, and techniques to master math concepts at every level.
           </p>
         </div>
 
@@ -117,7 +70,7 @@ export default function ResourcesPage() {
                 
                 <Link href={`/resources/${category.id}`} className="mt-auto">
                   <MagicButton className="w-full text-sm py-3">
-                    Explore Strategies →
+                    Explore {category.id.includes('tables') ? 'Tables' : 'Strategies'} →
                   </MagicButton>
                 </Link>
               </div>
@@ -127,7 +80,7 @@ export default function ResourcesPage() {
 
         {/* Quick Access Section */}
         <ContentCard className="p-8 text-center mb-8">
-          <h2 className="text-3xl font-bold text-white mb-6">Quick Strategy Finder</h2>
+          <h2 className="text-3xl font-bold text-white mb-6">Quick Access</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Link href="/resources/addition-strategies" className="group">
               <div className="bg-green-50/20 p-4 rounded-lg hover:bg-green-500/30 transition-colors">
@@ -147,10 +100,10 @@ export default function ResourcesPage() {
                 <p className="text-white font-semibold">Multiplication</p>
               </div>
             </Link>
-            <Link href="/resources/division-strategies" className="group">
-              <div className="bg-orange-500/20 p-4 rounded-lg hover:bg-orange-50/30 transition-colors">
-                <div className="text-3xl mb-2">➗</div>
-                <p className="text-white font-semibold">Division</p>
+            <Link href="/resources/multiplication-tables" className="group">
+              <div className="bg-indigo-500/20 p-4 rounded-lg hover:bg-indigo-500/30 transition-colors">
+                <div className="text-3xl mb-2">🔢</div>
+                <p className="text-white font-semibold">Times Tables</p>
               </div>
             </Link>
           </div>

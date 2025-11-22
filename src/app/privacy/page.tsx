@@ -6,6 +6,9 @@ import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageCon
 export const metadata: Metadata = {
   title: 'Privacy Policy | CoolMathsZone',
   description: 'Cool Maths Zone comprehensive privacy policy detailing how we protect children\'s data and user information on our educational gaming platform.',
+  alternates: {
+    canonical: 'https://coolmathszone.com/privacy',
+  },
 };
 
 export default function PrivacyPage() {

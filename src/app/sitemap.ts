@@ -1,7 +1,8 @@
 // app/sitemap.ts
 import { MetadataRoute } from 'next'
 import { gradeLevels } from '@/data/syllabus'
-import { getAllGradeLevels, getGradeLevel } from '@/utils/gradeHelpers'
+import { resourceCategories } from '@/data/resources'
+import { resourceData } from '@/data/resources-strategies'
 
 // Base URL - update this to your actual domain
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://coolmathszone.com'
@@ -58,13 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/worksheets/generate`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    },
+    }
   ]
 
   // Grade level pages
@@ -75,7 +70,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }))
 
-  // Topic pages for each grade
+  // Topic pages for each grade (only include if these routes exist)
   const topicRoutes = gradeLevels.flatMap((grade): MetadataRoute.Sitemap => 
     grade.topics.map((topic): MetadataRoute.Sitemap[0] => ({
       url: `${baseUrl}/grades/${grade.id}/${topic.id}`,
@@ -85,31 +80,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   )
 
-  // Category pages for exercises
-  const allCategories = Array.from(
-    new Set(
-      gradeLevels.flatMap(grade => 
-        grade.topics.map(topic => topic.category)
-      )
-    )
-  )
-
-  const categoryRoutes = allCategories.map((category): MetadataRoute.Sitemap[0] => ({
-    url: `${baseUrl}/exercises/category/${category.toLowerCase().replace(/\s+/g, '-')}`,
+  // Resource category pages (only include actual resource categories)
+  const resourceCategoryRoutes = resourceCategories.map((category): MetadataRoute.Sitemap[0] => ({
+    url: `${baseUrl}/resources/${category.id}`,
     lastModified: currentDate,
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.6,
   }))
-
-  // Resource topic pages (if they exist)
-  const resourceTopicRoutes = gradeLevels.flatMap((grade): MetadataRoute.Sitemap => 
-    grade.topics.map((topic): MetadataRoute.Sitemap[0] => ({
-      url: `${baseUrl}/resources/${topic.id}`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    }))
-  )
 
   // Worksheet pages
   const worksheetGradeRoutes = gradeLevels.map((grade): MetadataRoute.Sitemap[0] => ({
@@ -133,8 +110,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticRoutes,
     ...gradeRoutes,
     ...topicRoutes,
-    ...categoryRoutes,
-    ...resourceTopicRoutes,
+    ...resourceCategoryRoutes,
     ...worksheetGradeRoutes,
     ...worksheetTopicRoutes,
   ]

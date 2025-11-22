@@ -78,6 +78,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${gradeLevel.title} | CoolMathsZone`,
     description: gradeLevel.description,
+    alternates: {
+      canonical: `https://coolmathszone.com/grades/${gradeLevel.id}`,
+    },
     other: {
       'script:ld+json': JSON.stringify(faqSchema)
     }

@@ -8,6 +8,9 @@ import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageCon
 export const metadata: Metadata = {
   title: 'Contact Us | CoolMathsZone',
   description: 'Get in touch with the CoolMathsZone team - Bishu Som and Shubhang Som. We love hearing from our users!',
+  alternates: {
+    canonical: 'https://coolmathszone.com/contact'
+  }
 };
 
 export default function ContactPage() {

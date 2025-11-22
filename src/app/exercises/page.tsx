@@ -42,6 +42,9 @@ const getAllTopicsForSearch = () => {
 export const metadata: Metadata = {
   title: 'Math Exercises by Topic | CoolMathsZone',
   description: 'Browse and search math exercises across all grade levels. Find multiplication, fractions, geometry, and more!',
+  alternates: {
+    canonical: 'https://coolmathszone.com/exercises'
+  },
   other: {
     'script:ld+json': JSON.stringify({
       '@context': 'https://schema.org',

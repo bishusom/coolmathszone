@@ -3,6 +3,20 @@ import Footer from '@/components/ui/Footer';
 import ResponsiveAd from '@/components/ResponsiveAd';
 import { getAllGradeLevels } from '@/utils/gradeHelpers';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params }: PageProps<any>): Promise<Metadata> {
+  const title = 'Math Worksheets - Printable Practice for All Grades';
+  const description = 'Generate and download printable math worksheets for various grade levels and topics. Perfect for extra practice and offline learning.';
+  
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: 'https://coolmathszone.com/worksheets',
+    },
+  };
+}
 
 export default function WorksheetsPage() {
   const gradeLevels = getAllGradeLevels();

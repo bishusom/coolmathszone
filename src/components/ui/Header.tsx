@@ -12,7 +12,7 @@ export default function Header() {
               {/* Logo Container */}
               <div className="w-14 h-14 bg-gradient-ocean rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg overflow-hidden">
                 <Image
-                  src="/cmz-logo.png"
+                  src="/cmz-logo.webp"
                   alt="CoolMathsZone Dolphin Logo"
                   width={60}
                   height={60}

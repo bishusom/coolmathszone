@@ -133,7 +133,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${categoryName} Exercises | CoolMathsZone`,
     description: `Math exercises for ${categoryName} across all grade levels. ${categoryTopics.length} interactive exercises available for ${gradeLevelsCount} grade levels.`,
     alternates: {
-      canonical: `https://coolmathszone.com/exercises/${categoryName.toLowerCase()}`
+      canonical: `https://coolmathszone.com/exercises/category/${categoryName.toLowerCase()}`
     },
     other: {
       'script:ld+json': JSON.stringify(faqSchema)

@@ -14,6 +14,20 @@ interface PageProps {
   }>;
 }
 
+export async function generateMetadata({ params }: PageProps): Promise<{ title: string; description: string; alternates: { canonical: string } }> {
+  const { grade, topic } = await params;
+  const title = `Worksheets for ${topic} - ${grade} | CoolMathsZone`;
+  const description = `Generate and download printable worksheets for ${topic} in ${grade}. Perfect for extra practice and offline learning.`;
+  
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `https://coolmathszone.com/worksheets/${grade}/${topic}`,
+    },
+  };
+}
+
 export default function TopicWorksheetPage({ params }: PageProps) {
   // Unwrap the params Promise using React.use()
   const { grade, topic } = use(params);

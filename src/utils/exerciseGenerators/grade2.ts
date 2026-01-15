@@ -1227,12 +1227,38 @@ export const grade2Generators = {
     };
   },
   'repeated-addition': (): ExerciseTemplate => {
+    const safeEnsureFourOptions = (correctAnswer: string, min: number, max: number): string[] => {
+      const correctNum = parseInt(correctAnswer);
+      const options = [correctAnswer];
+      
+      // Fix: Ensure valid range
+      if (min >= max) {
+        console.log(`DEBUG: Adjusting range from ${min}-${max} to ${min}-${min + 10}`);
+        max = min + 10;
+      }
+      
+      let attempts = 0;
+      const maxAttempts = 50;
+      
+      while (options.length < 4 && attempts < maxAttempts) {
+        attempts++;
+        const wrongNum = Math.floor(Math.random() * (max - min + 1)) + min;
+        const wrongStr = wrongNum.toString();
+        
+        if (wrongStr !== correctAnswer && !options.includes(wrongStr)) {
+          options.push(wrongStr);
+        }
+      }
+
+      return options.sort(() => Math.random() - 0.5);
+    };
+
     const additionTypes = [
       {
         type: 'groups-of-objects',
         generate: () => {
-          const groups = Math.floor(Math.random() * 4) + 2;
-          const itemsPerGroup = Math.floor(Math.random() * 5) + 2;
+          const groups = Math.floor(Math.random() * 4) + 2; // 2-5 groups
+          const itemsPerGroup = Math.floor(Math.random() * 5) + 2; // 2-6 items
           const total = groups * itemsPerGroup;
           const objects = ['🐠', '🐚', '🌟', '💎', '🦀', '🐙'];
           const object = objects[Math.floor(Math.random() * objects.length)];
@@ -1240,21 +1266,21 @@ export const grade2Generators = {
           return {
             question: `There are ${groups} groups of ${itemsPerGroup} ${object}. How many ${object} in total?`,
             correctAnswer: total.toString(),
-            options: ensureFourOptions(total.toString(), total - 3, total + 3),
+            options: safeEnsureFourOptions(total.toString(), Math.max(1, total - 3), total + 3),
             hints: [
               `Add ${itemsPerGroup} + ${itemsPerGroup} + ... (${groups} times)`,
               `This is ${groups} groups of ${itemsPerGroup}`,
               `You can multiply: ${groups} × ${itemsPerGroup} = ${total}`
             ],
-            visualAid: object.repeat(itemsPerGroup) + ' '.repeat(2) + `× ${groups}`
+            visualAid: object.repeat(Math.min(itemsPerGroup, 3)) + (itemsPerGroup > 3 ? '...' : '') + ` × ${groups}`
           };
         }
       },
       {
         type: 'addition-to-multiplication',
         generate: () => {
-          const number = Math.floor(Math.random() * 5) + 2;
-          const count = Math.floor(Math.random() * 4) + 3;
+          const number = Math.floor(Math.random() * 5) + 2; // 2-6
+          const count = Math.floor(Math.random() * 4) + 3; // 3-6
           const total = number * count;
           
           const additionExpression = Array(count).fill(number).join(' + ');
@@ -1307,7 +1333,7 @@ export const grade2Generators = {
       {
         type: 'equal-groups',
         generate: () => {
-          const total = Math.floor(Math.random() * 20) + 10;
+          const total = Math.floor(Math.random() * 20) + 10; // 10-29
           const groupSize = [2, 3, 4, 5][Math.floor(Math.random() * 4)];
           const groups = Math.ceil(total / groupSize);
           const objects = ['🍪', '🎈', '📚', '✏️'];
@@ -1316,13 +1342,13 @@ export const grade2Generators = {
           return {
             question: `You have ${total} ${object}. If you put them into groups of ${groupSize}, how many groups can you make?`,
             correctAnswer: groups.toString(),
-            options: ensureFourOptions(groups.toString(), groups - 1, groups + 1),
+            options: safeEnsureFourOptions(groups.toString(), Math.max(1, groups - 1), groups + 1),
             hints: [
               `Divide ${total} by ${groupSize}`,
               `How many times does ${groupSize} fit into ${total}?`,
               `Use repeated subtraction or counting`
             ],
-            visualAid: object.repeat(groupSize) + ' '.repeat(2) + `... ${groups} times`
+            visualAid: object.repeat(Math.min(groupSize, 3)) + (groupSize > 3 ? '...' : '') + ` ... ${groups} times`
           };
         }
       },
@@ -1330,7 +1356,7 @@ export const grade2Generators = {
         type: 'skip-counting',
         generate: () => {
           const skipBy = [2, 3, 4, 5][Math.floor(Math.random() * 4)];
-          const count = Math.floor(Math.random() * 4) + 3;
+          const count = Math.floor(Math.random() * 4) + 3; // 3-6
           const total = skipBy * count;
           
           const sequence = Array(count).fill(0).map((_, i) => skipBy * (i + 1));
@@ -1339,7 +1365,7 @@ export const grade2Generators = {
           return {
             question: `Complete this skip-counting sequence:\n${partialSequence}`,
             correctAnswer: total.toString(),
-            options: ensureFourOptions(total.toString(), total - skipBy, total + skipBy),
+            options: safeEnsureFourOptions(total.toString(), total - skipBy, total + skipBy),
             hints: [
               `Skip count by ${skipBy}s`,
               `The pattern is adding ${skipBy} each time`,
@@ -1352,8 +1378,8 @@ export const grade2Generators = {
     ];
 
     const selectedType = additionTypes[Math.floor(Math.random() * additionTypes.length)];
-    const generated = selectedType.generate();
     
+    const generated = selectedType.generate();
     return {
       id: `repeated-add-${Date.now()}-${Math.random()}`,
       type: 'multiple-choice',
@@ -1363,7 +1389,7 @@ export const grade2Generators = {
       hints: generated.hints,
       visualAid: generated.visualAid
     };
-  },
+  }
 };
 
 // Helper functions for time options generation

@@ -1,8 +1,8 @@
-// components/DownloadWorksheet.tsx
+// components/DownloadWorksheet.tsx - UPDATED
 'use client';
 
 import { useState } from 'react';
-import { pdf, BlobProvider } from '@react-pdf/renderer';
+import { BlobProvider } from '@react-pdf/renderer';
 import { WorksheetPDF } from './WorksheetPDF';
 import { MagicButton } from '@/components/ui/PageContainer';
 
@@ -25,14 +25,21 @@ export default function DownloadWorksheet({
 }: DownloadWorksheetProps) {
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     setIsGenerating(true);
-    // The download will be handled by BlobProvider
-    setTimeout(() => setIsGenerating(false), 2000);
+    // Reset after 3 seconds (PDF generation complete)
+    setTimeout(() => setIsGenerating(false), 3000);
   };
 
+  // Format filename
+  const formatTopic = topicId.split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+    
+  const filename = `coolmathszone-${gradeId}-${formatTopic.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`;
+
   return (
-    <div className="text-center">
+    <div>
       <BlobProvider
         document={
           <WorksheetPDF
@@ -45,34 +52,39 @@ export default function DownloadWorksheet({
       >
         {({ blob, url, loading, error }) => (
           <div>
-            {!loading && blob && url && (
+            {!loading && blob && url ? (
               <a
                 href={url}
-                download={`${gradeId}-${topicId}-worksheet.pdf`}
+                download={filename}
                 onClick={handleDownload}
+                className="block"
               >
-                <MagicButton disabled={isGenerating} className="text-lg">
-                  {isGenerating ? '📄 Generating...' : '📥 Download PDF Worksheet'}
+                <MagicButton 
+                  disabled={isGenerating} 
+                  className={`w-full text-lg flex items-center justify-center gap-2 ${
+                    isGenerating ? 'bg-gradient-to-r from-gray-600 to-gray-700' : 'bg-gradient-to-r from-blue-600 to-purple-600'
+                  }`}
+                >
+                  {isGenerating ? (
+                    <>
+                      <span className="animate-spin">⏳</span>
+                      Creating PDF...
+                    </>
+                  ) : (
+                    <>
+                      📥 Download PDF
+                    </>
+                  )}
                 </MagicButton>
               </a>
-            )}
-            {loading && (
-              <MagicButton disabled className="text-lg">
-                ⏳ Preparing Worksheet...
+            ) : (
+              <MagicButton disabled className="w-full text-lg bg-gradient-to-r from-gray-600 to-gray-700">
+                {loading ? '📄 Preparing PDF...' : 'Error generating PDF'}
               </MagicButton>
-            )}
-            {error && (
-              <div className="text-red-400">
-                Error generating worksheet. Please try again.
-              </div>
             )}
           </div>
         )}
       </BlobProvider>
-      
-      <p className="text-white/60 mt-2 text-sm">
-        Printable worksheet with problems and answer space
-      </p>
     </div>
   );
 }

@@ -16,36 +16,58 @@ export default function Home() {
   return (
     <Layout>
       {/* Ocean Hero Section */}
-      <section className="relative py-8 bg-blue-900 text-white overflow-hidden">
-        {/* Animated wave */}
-        <div className="absolute bottom-0 left-0 right-0 h-20">
-          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-cyan-500/20 to-transparent"></div>
-          <div className="flex justify-center space-x-8 absolute -bottom-4 left-0 right-0">
-            {['🔢', '📐', '🧮', '📊', '∑'].map((symbol, i) => (
-              <div 
-                key={i}
-                className="text-xl animate-bounce"
-                style={{animationDelay: `${i * 0.3}s`}}
-              >
-                {symbol}
-              </div>
-            ))}
-          </div>
+      <section className="relative py-20 lg:py-32 overflow-hidden gradient-arctic-adventure text-white">
+        
+        <div className="absolute inset-0">
+          {/* Floating math symbols */}
+          <div className="absolute top-20 left-10 text-4xl animate-float">🔢</div>
+          <div className="absolute top-40 right-20 text-3xl animate-float" style={{animationDelay: '2s'}}>📐</div>
+          <div className="absolute bottom-20 left-20 text-3xl animate-float" style={{animationDelay: '4s'}}>📊</div>
+          <div className="absolute bottom-40 right-10 text-4xl animate-float" style={{animationDelay: '1s'}}>∑</div>
+          <div className="absolute top-1/3 left-1/4 text-2xl animate-float" style={{animationDelay: '3s'}}>∞</div>
         </div>
         
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl font-black mb-4">
-            Make a <span className="text-cyan-400">Splash</span> in Math!
-          </h1>
-          <p className="text-xl mb-6 max-w-2xl mx-auto">
-            Making maths magical from Kindergarten to 8th grade
-          </p>
-          <div className="flex justify-center gap-3">
-            <Link href="/grades">
-              <button className="bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-lg font-bold flex items-center gap-2">
-                <span>🚤</span> Launch Learning
-              </button>
-            </Link>
+        <div className="relative container mx-auto px-4 text-center">
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
+              Math is
+              <span className="block bg-gradient-to-r from-blue-300 via-cyan-300 to-teal-300 bg-clip-text text-transparent">
+                MAGICAL! ✨
+              </span>
+            </h1>
+            
+            <p className="text-xl md:text-2xl lg:text-3xl mb-8 text-blue-100 font-light leading-relaxed">
+              Turn numbers into adventures and equations into superpowers!
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+              <Link href="/grades">
+                <button className="bg-white text-blue-600 font-black text-lg px-8 py-4 rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 hover:bg-cyan-50 border-2 border-cyan-300">
+                  🐬 View All Grades
+                </button>
+              </Link>
+              <Link href="/grades/grade3/multiplication">
+                <button className="border-2 border-cyan-300 text-white font-black text-lg px-8 py-4 rounded-2xl hover:bg-cyan-300 hover:text-blue-600 transition-all duration-300 bg-white/10 backdrop-blur-sm">
+                  🌊 Try Sample Lesson
+                </button>
+              </Link>
+            </div>
+
+            {/* Fun stats - Updated to blue theme */}
+            <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl font-black text-cyan-300">100+</div>
+                <div className="text-blue-200 text-sm">Math Games</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-black text-teal-300">K - 8</div>
+                <div className="text-blue-200 text-sm">Grade Levels</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-black text-blue-300">∞</div>
+                <div className="text-blue-200 text-sm">Fun!</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

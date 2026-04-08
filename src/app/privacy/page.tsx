@@ -1,11 +1,10 @@
-// app/privacy/page.tsx
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | CoolMathsZone',
-  description: 'Cool Maths Zone comprehensive privacy policy detailing how we protect children\'s data and user information on our educational gaming platform.',
+  description: 'CoolMathsZone privacy policy covering accounts, game progress, lesson usage, analytics, and how user data is handled.',
   alternates: {
     canonical: 'https://coolmathszone.com/privacy',
   },
@@ -15,14 +14,13 @@ export default function PrivacyPage() {
   return (
     <PageContainer>
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
         <div className="text-center mb-12">
           <Link href="/" className="inline-block mb-6">
             <MagicButton className="text-lg">
               𓇼 Back to Math Adventures
             </MagicButton>
           </Link>
-          
+
           <div className="flex items-center justify-center mb-6">
             <span className="text-6xl mr-4">🔒</span>
             <div>
@@ -30,226 +28,209 @@ export default function PrivacyPage() {
               <div className="w-32 h-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
             </div>
           </div>
-          
+
           <p className="text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Protecting your privacy and your children's data is our top priority
+            How CoolMathsZone handles accounts, saved progress, analytics, and guest play.
           </p>
         </div>
 
-        {/* Policy Content */}
         <ContentCard className="p-8 max-w-4xl mx-auto">
-          {/* Important Notice */}
-          <div className="bg-green-800/20 border-l-4 border-yellow-400 p-6 mb-8 rounded-lg">
-            <div className="flex items-start">
-              <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-bold mr-4 mt-1">
-                COPPA COMPLIANT
-              </span>
-              <div>
-                <p className="text-yellow-100 font-semibold text-lg mb-2">
-                  Important Note for Parents
-                </p>
-                <p className="text-yellow-50">
-                  Cool Maths Zone is committed to protecting children's privacy. Our platform complies with the Children's Online Privacy Protection Act (COPPA) and other applicable regulations.
-                </p>
-              </div>
-            </div>
+          <div className="bg-blue-800/20 border-l-4 border-cyan-400 p-6 mb-8 rounded-lg">
+            <p className="text-cyan-100 font-semibold text-lg mb-2">
+              Plain-language summary
+            </p>
+            <p className="text-white">
+              Lessons remain free to access whether you are logged in or using the site as a guest. If you create an account, we store profile and progress data so your coins, skins, streaks, and saved gameplay can persist across sessions. If you stay as a guest, some lesson unlocks and cosmetic selections may be stored only in your browser on that device.
+            </p>
           </div>
 
           <div className="text-gray-300 space-y-8">
-            <p className="text-right text-gray-400 text-sm">Last Updated: April 2025</p>
+            <p className="text-right text-gray-400 text-sm">Last Updated: April 7, 2026</p>
 
-            {/* Introduction */}
             <section>
               <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">1. Introduction</h2>
               <p className="text-white leading-relaxed">
-                Welcome to Cool Maths Zone ("we", "our", or "us"). We operate the website coolmathszone.com (the "Service").
+                CoolMathsZone (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) operates coolmathszone.com (the &quot;Service&quot;). This policy explains what information we collect, how we use it, and what choices you have when using the Service.
               </p>
               <p className="text-white leading-relaxed mt-3">
-                We respect your privacy and are committed to protecting your personal information. This privacy policy explains how we collect, use, disclose, and safeguard your information when you visit our Service.
+                We aim to collect as little personal information as we reasonably can while still supporting free lessons, optional accounts, saved progress, and interactive games.
               </p>
             </section>
 
-            {/* Information We Collect */}
             <section>
               <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">2. Information We Collect</h2>
-              
+
               <div className="bg-blue-500/10 p-6 rounded-lg mb-6">
-                <h3 className="text-2xl font-bold text-cyan-300 mb-4">2.1 Personal Information</h3>
-                <p className="text-white mb-4">We collect minimal personal information to provide and improve our Service:</p>
+                <h3 className="text-2xl font-bold text-cyan-300 mb-4">2.1 Information You Provide</h3>
                 <ul className="list-disc list-inside space-y-3 ml-4 text-white">
-                  <li><span className="font-bold text-cyan-300">Account Data:</span> For registered users, we collect username and password.</li>
-                  <li><span className="font-bold text-cyan-300">Contact Data:</span> Email address for account recovery or parental contact.</li>
-                  <li><span className="font-bold text-cyan-300">Parental Consent:</span> For users under 13, we collect parent/guardian email for COPPA compliance.</li>
+                  <li><span className="font-bold text-cyan-300">Account Information:</span> If you sign in or register, we may process your email address and any username or profile details attached to your account.</li>
+                  <li><span className="font-bold text-cyan-300">Contact Information:</span> If you contact us through the contact form, we process the information you submit so we can respond.</li>
+                  <li><span className="font-bold text-cyan-300">Profile Preferences:</span> For signed-in users, we store selected skins and unlocked assets so they persist across sessions.</li>
                 </ul>
               </div>
 
-              <div className="bg-green-500/10 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold text-green-300 mb-4">2.2 Non-Personal Information</h3>
-                <p className="text-white mb-4">We automatically collect certain technical information:</p>
+              <div className="bg-green-500/10 p-6 rounded-lg mb-6">
+                <h3 className="text-2xl font-bold text-green-300 mb-4">2.2 Information We Generate During Use</h3>
                 <ul className="list-disc list-inside space-y-3 ml-4 text-white">
-                  <li><span className="font-bold text-green-200">Usage Data:</span> Game progress, scores, and feature usage.</li>
-                  <li><span className="font-bold text-green-200">Technical Data:</span> IP address, browser type, device information.</li>
-                  <li><span className="font-bold text-green-200">Cookies Data:</span> Session cookies for functionality.</li>
+                  <li><span className="font-bold text-green-200">Game and Lesson Progress:</span> Scores, coins, XP, streaks, unlocked skins, and related gameplay/profile progress for signed-in users.</li>
+                  <li><span className="font-bold text-green-200">Lesson Completion Data:</span> Completion of certain lesson topics may unlock cosmetic skins for logged-in users, and may be stored locally for guests.</li>
+                  <li><span className="font-bold text-green-200">Analytics and Usage Data:</span> Page views, session behavior, and feature usage to understand how people use the Service.</li>
+                </ul>
+              </div>
+
+              <div className="bg-purple-500/10 p-6 rounded-lg">
+                <h3 className="text-2xl font-bold text-purple-300 mb-4">2.3 Device and Browser Data</h3>
+                <ul className="list-disc list-inside space-y-3 ml-4 text-white">
+                  <li><span className="font-bold text-purple-200">Technical Information:</span> IP address, browser type, device information, and operating system.</li>
+                  <li><span className="font-bold text-purple-200">Local Browser Storage:</span> For guest users, certain unlocks and equipped skins may be stored in your browser on that device.</li>
+                  <li><span className="font-bold text-purple-200">Cookies and Similar Technologies:</span> We use cookies or similar technologies for authentication, security, analytics, and essential site features.</li>
                 </ul>
               </div>
             </section>
 
-            {/* How We Use Information */}
             <section>
-              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">3. How We Use Your Information</h2>
-              <p className="text-white mb-4">We use the collected data for various purposes:</p>
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">3. How We Use Information</h2>
               <ol className="list-decimal list-inside space-y-3 ml-4 text-white bg-purple-500/10 p-6 rounded-lg">
-                <li className="mb-2">To provide and maintain our Service</li>
-                <li className="mb-2">To notify you about changes to our Service</li>
-                <li className="mb-2">To allow participation in interactive features</li>
-                <li className="mb-2">To provide customer support</li>
-                <li className="mb-2">To gather analysis to improve our Service</li>
-                <li className="mb-2">To monitor Service usage</li>
-                <li className="mb-2">To detect and prevent technical issues</li>
-                <li>For educational research and product development</li>
+                <li>To provide free lessons, games, and educational content.</li>
+                <li>To authenticate users and maintain optional accounts.</li>
+                <li>To save coins, skins, streaks, scores, and other profile progress for signed-in users.</li>
+                <li>To store guest unlocks and cosmetic preferences locally in the browser when no account is used.</li>
+                <li>To improve site performance, content quality, and gameplay experience.</li>
+                <li>To monitor usage, diagnose technical issues, and protect the Service against abuse.</li>
+                <li>To respond to support requests or messages you send us.</li>
               </ol>
             </section>
 
-            {/* Data Protection for Children */}
             <section>
-              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">4. Data Protection for Children</h2>
-              
-              <div className="bg-cyan-500/10 p-6 rounded-lg mb-6">
-                <div className="flex items-center mb-4">
-                  <span className="bg-cyan-500 text-white px-3 py-1 rounded-full text-sm font-bold mr-4">
-                    COPPA COMPLIANT
-                  </span>
-                  <p className="text-cyan-200 font-semibold">
-                    We take special care to protect children's privacy as required by the Children's Online Privacy Protection Act.
-                  </p>
-                </div>
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">4. Accounts, Guests, and Saved Progress</h2>
 
-                <h3 className="text-2xl font-bold text-cyan-300 mb-4">4.1 For Children Under 13</h3>
+              <div className="bg-cyan-500/10 p-6 rounded-lg mb-6">
+                <h3 className="text-2xl font-bold text-cyan-300 mb-4">4.1 Logged-in Users</h3>
+                <p className="text-white mb-4">
+                  If you create or use an account, we may store the following so your experience persists across visits:
+                </p>
                 <ul className="list-disc list-inside space-y-3 ml-4 text-white">
-                  <li>We collect minimal personal information only with verifiable parental consent</li>
-                  <li>Parents can review, delete, or refuse further collection of their child's information</li>
-                  <li>We never require more personal information than reasonably necessary</li>
+                  <li>Username and email address</li>
+                  <li>Math coins and XP</li>
+                  <li>Unlocked skins and active skin selection</li>
+                  <li>Daily streak information</li>
+                  <li>Saved gameplay-related profile information</li>
                 </ul>
               </div>
 
               <div className="bg-teal-500/10 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold text-teal-300 mb-4">4.2 Parental Rights</h3>
-                <p className="text-white mb-4">Parents/guardians of children under 13 can:</p>
+                <h3 className="text-2xl font-bold text-teal-300 mb-4">4.2 Guest Users</h3>
+                <p className="text-white mb-4">
+                  You can still access lessons without logging in. When using the Service as a guest:
+                </p>
                 <ul className="list-disc list-inside space-y-3 ml-4 text-white">
-                  <li>Review their child's personal information</li>
-                  <li>Request deletion of their child's information</li>
-                  <li>Refuse further collection or use of their child's information</li>
-                  <li>Revoke consent at any time</li>
+                  <li>Lesson access remains free and available.</li>
+                  <li>Some lesson-based skin unlocks and equipped cosmetic selections may be stored only in local browser storage on your device.</li>
+                  <li>Guest progress stored locally may be lost if you clear browser storage, use a different browser, or switch devices.</li>
                 </ul>
               </div>
             </section>
 
-            {/* Data Security */}
             <section>
-              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">5. Data Security</h2>
-              <p className="text-white mb-4">We implement appropriate technical and organizational measures to protect personal data:</p>
-              <ul className="list-disc list-inside space-y-3 ml-4 text-white bg-blue-500/10 p-6 rounded-lg">
-                <li>Encryption of data in transit (SSL/TLS)</li>
-                <li>Regular security assessments</li>
-                <li>Limited access to personal data</li>
-                <li>Secure storage practices</li>
-              </ul>
-            </section>
-
-            {/* Data Retention */}
-            <section>
-              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">6. Data Retention</h2>
-              <p className="text-white mb-4">We retain personal data only as long as necessary:</p>
-              <ul className="list-disc list-inside space-y-3 ml-4 text-white bg-green-500/10 p-6 rounded-lg">
-                <li>Account data: Until account deletion request</li>
-                <li>Usage data: 12 months for analytics</li>
-                <li>Parental consent records: As required by COPPA (typically 3 years)</li>
-              </ul>
-            </section>
-
-            {/* Legal Rights */}
-            <section>
-              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">7. Your Legal Rights</h2>
-              <p className="text-white mb-4">Depending on your location, you may have rights including:</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white">
-                <div className="bg-white/5 p-4 rounded-lg">
-                  <strong className="text-blue-300">Access:</strong> Request copies of your personal data
-                </div>
-                <div className="bg-white/5 p-4 rounded-lg">
-                  <strong className="text-blue-300">Rectification:</strong> Request correction of inaccurate data
-                </div>
-                <div className="bg-white/5 p-4 rounded-lg">
-                  <strong className="text-blue-300">Erasure:</strong> Request deletion of your personal data
-                </div>
-                <div className="bg-white/5 p-4 rounded-lg">
-                  <strong className="text-blue-300">Restrict Processing:</strong> Request limitation of how we use your data
-                </div>
-                <div className="bg-white/5 p-4 rounded-lg">
-                  <strong className="text-blue-300">Data Portability:</strong> Request transfer of your data to another service
-                </div>
-                <div className="bg-white/5 p-4 rounded-lg">
-                  <strong className="text-blue-300">Object:</strong> Object to our processing of your data
-                </div>
-                <div className="bg-white/5 p-4 rounded-lg md:col-span-2">
-                  <strong className="text-blue-300">Withdraw Consent:</strong> Withdraw previously given consent
-                </div>
-              </div>
-            </section>
-
-            {/* Third-Party Services */}
-            <section>
-              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">8. Third-Party Services</h2>
-              <p className="text-white mb-4">We use these third-party services that may process data:</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white bg-purple-500/10 p-6 rounded-lg">
-                <div>
-                  <strong className="text-purple-100">Google Analytics:</strong> Website analytics (anonymous data)
-                </div>
-                <div>
-                  <strong className="text-purple-100">Google AdSense:</strong> Advertising platform
-                </div>
-                <div>
-                  <strong className="text-purple-100">Cloudflare:</strong> Security and performance
-                </div>
-                <div>
-                  <strong className="text-purple-100">Netlify:</strong> Website hosting
-                </div>
-              </div>
-              <p className="text-white mt-4">
-                We vet all third parties for privacy compliance and limit data sharing.
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">5. Children&apos;s Privacy</h2>
+              <p className="text-white leading-relaxed">
+                CoolMathsZone is designed for educational use, including by children. We try to limit the personal information we collect and support guest lesson access without requiring an account.
+              </p>
+              <p className="text-white leading-relaxed mt-3">
+                If you are a parent or guardian and believe a child has provided personal information through the Service that should be reviewed or removed, please contact us. We will review the request and respond as appropriate.
               </p>
             </section>
 
-            {/* Policy Updates */}
             <section>
-              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">9. Policy Updates</h2>
-              <p className="text-white mb-4">We may update this policy periodically. We'll notify you of changes by:</p>
-              <ul className="list-disc list-inside space-y-3 ml-4 text-white bg-yellow-500/10 p-6 rounded-lg">
-                <li>Posting the new policy on this page</li>
-                <li>Updating the "Last Updated" date</li>
-                <li>For significant changes, we may provide additional notice</li>
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">6. Data Security</h2>
+              <ul className="list-disc list-inside space-y-3 ml-4 text-white bg-blue-500/10 p-6 rounded-lg">
+                <li>Encryption of data in transit through HTTPS/TLS</li>
+                <li>Use of managed infrastructure and authentication providers</li>
+                <li>Access controls for systems we manage</li>
+                <li>Reasonable technical steps to reduce unauthorized access risk</li>
+              </ul>
+              <p className="text-white mt-4">
+                No system can guarantee absolute security, but we work to protect the data we hold.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">7. Data Retention</h2>
+              <ul className="list-disc list-inside space-y-3 ml-4 text-white bg-green-500/10 p-6 rounded-lg">
+                <li>Account-related information is generally retained while the account remains active, unless deletion is requested.</li>
+                <li>Gameplay and profile progress linked to an account may be retained so the Service continues to function for that user.</li>
+                <li>Guest unlocks stored in the browser remain until they are cleared by the user or overwritten.</li>
+                <li>Analytics data may be retained according to the settings of the analytics providers we use.</li>
               </ul>
             </section>
 
-            {/* Contact Us */}
             <section>
-            <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">10. Contact Us</h2>
-            <p className="text-gray-200 mb-6">For privacy-related questions or requests:</p>
-            
-            <div className="text-center bg-white/5 p-8 rounded-lg border-2 border-cyan-500/30">
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">8. Third-Party Services</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white bg-purple-500/10 p-6 rounded-lg">
+                <div>
+                  <strong className="text-purple-100">Supabase:</strong> Authentication, account sessions, and profile-related data storage
+                </div>
+                <div>
+                  <strong className="text-purple-100">Google Analytics:</strong> Site analytics and usage measurement
+                </div>
+                <div>
+                  <strong className="text-purple-100">Google AdSense:</strong> Advertising services
+                </div>
+                <div>
+                  <strong className="text-purple-100">Netlify:</strong> Hosting and delivery infrastructure
+                </div>
+              </div>
+              <p className="text-white mt-4">
+                These providers may process information on our behalf according to their own terms and privacy practices.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">9. Your Choices</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white">
+                <div className="bg-white/5 p-4 rounded-lg">
+                  <strong className="text-blue-300">Use as Guest:</strong> You can access lessons without creating an account.
+                </div>
+                <div className="bg-white/5 p-4 rounded-lg">
+                  <strong className="text-blue-300">Sign Out:</strong> You can stop using a signed-in session at any time.
+                </div>
+                <div className="bg-white/5 p-4 rounded-lg">
+                  <strong className="text-blue-300">Browser Storage:</strong> You can clear locally stored guest unlocks through your browser settings.
+                </div>
+                <div className="bg-white/5 p-4 rounded-lg">
+                  <strong className="text-blue-300">Contact Us:</strong> You can contact us about account, privacy, or deletion requests.
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">10. Policy Updates</h2>
+              <ul className="list-disc list-inside space-y-3 ml-4 text-white bg-yellow-500/10 p-6 rounded-lg">
+                <li>We may update this policy as the Service changes.</li>
+                <li>We will update the &quot;Last Updated&quot; date when we make changes.</li>
+                <li>Material changes may also be highlighted in-product or elsewhere on the site.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-3xl font-bold text-white mb-4 pb-2 border-b border-gray-600">11. Contact Us</h2>
+              <p className="text-gray-200 mb-6">For privacy-related questions or requests:</p>
+
+              <div className="text-center bg-white/5 p-8 rounded-lg border-2 border-cyan-500/30">
                 <div className="text-4xl mb-4">📧</div>
                 <h3 className="text-xl font-bold text-cyan-300 mb-4">Get in Touch</h3>
                 <p className="text-gray-200 mb-6 max-w-md mx-auto">
-                Have questions about our privacy policy or need to exercise your data rights?
+                  Have questions about this policy, your account data, or guest-stored unlocks?
                 </p>
                 <Link href="/contact">
-                <MagicButton>
+                  <MagicButton>
                     🐚 Contact Us
-                </MagicButton>
+                  </MagicButton>
                 </Link>
                 <p className="text-white text-sm mt-4">
-                We aim to respond to all legitimate requests within 30 days.
+                  We aim to respond to legitimate privacy requests within a reasonable time.
                 </p>
-            </div>
+              </div>
             </section>
           </div>
         </ContentCard>

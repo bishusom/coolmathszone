@@ -11,6 +11,7 @@ import { getGradeConfig, getTopicTitle } from '@/utils/gradeHelpers';
 import { gradeLevels } from '@/data/syllabus'
 import type { ExerciseTemplate } from '@/utils/exerciseGenerators/grades';
 import { CURRENCIES, DEFAULT_CURRENCY } from '@/utils/currencyHelper'; // ADD THIS IMPORT
+import { useUnlocks } from '@/hooks/useUnlocks';
 
 
 type GradeLevelId = typeof gradeLevels[number]['id'];
@@ -134,6 +135,7 @@ export default function GradesFramework({
   
   // Analytics
   const analytics = useAnalytics();
+  const { checkModuleUnlock } = useUnlocks();
   const sessionStartTime = useRef<Date>(new Date());
   const exerciseStartTime = useRef<Date>(new Date());
   const sessionHeartbeatInterval = useRef<NodeJS.Timeout | null>(null);
@@ -246,6 +248,7 @@ export default function GradesFramework({
 
         if (finalScore / exercises.length >= 0.8) {
           analytics.trackTopicMastery(grade, topic, (finalScore / exercises.length) * 100);
+          checkModuleUnlock(topic);
         }
 
         // Show completion screen instead of auto-restarting

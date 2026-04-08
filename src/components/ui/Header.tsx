@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import UserProfileButton from './UserProfileButton';
+import MobileMenu from './MobileMenu';
 
 export default function Header() {
   return (
@@ -32,25 +34,43 @@ export default function Header() {
             </div>
           </Link>
           
-          {/* Navigation with ocean emojis */}
-          <nav className="hidden md:flex space-x-6">
-            <Link href="/grades" className="flex items-center space-x-2 text-blue-700 hover:text-emerald-600 font-bold transition-colors duration-300 py-2 group">
-              <span className="text-lg">🐠</span>
-              <span className="group-hover:scale-105 transition-transform">Grades</span>
-            </Link>
-            <Link href="/exercises" className="flex items-center space-x-2 text-blue-700 hover:text-teal-600 font-bold transition-colors duration-300 py-2 group">
-              <span className="text-lg">🎣</span>
-              <span className="group-hover:scale-105 transition-transform">Exercises</span>
-            </Link>
-            <Link href="/worksheets" className="flex items-center space-x-2 text-blue-700 hover:text-teal-600 font-bold transition-colors duration-300 py-2 group">
-              <span className="text-lg">📜</span>
-              <span className="group-hover:scale-105 transition-transform">Worksheets</span>
-            </Link>
-            <Link href="/resources" className="flex items-center space-x-2 text-blue-700 hover:text-teal-600 font-bold transition-colors duration-300 py-2 group">
-              <span className="text-lg">🐡</span>
-              <span className="group-hover:scale-105 transition-transform">Resources</span>
-            </Link>
-          </nav>
+          {/* Desktop Navigation + Profile */}
+          <div className="hidden md:flex items-center gap-6">
+            <nav className="flex space-x-6">
+              <Link href="/grades" className="flex items-center space-x-2 text-blue-700 hover:text-emerald-600 font-bold transition-colors duration-300 py-2 group">
+                <span className="text-lg">🐠</span>
+                <span className="group-hover:scale-105 transition-transform">Grades</span>
+              </Link>
+              <Link href="/exercises" className="flex items-center space-x-2 text-blue-700 hover:text-teal-600 font-bold transition-colors duration-300 py-2 group">
+                <span className="text-lg">🎣</span>
+                <span className="group-hover:scale-105 transition-transform">Exercises</span>
+              </Link>
+              <Link href="/worksheets" className="flex items-center space-x-2 text-blue-700 hover:text-teal-600 font-bold transition-colors duration-300 py-2 group">
+                <span className="text-lg">📜</span>
+                <span className="group-hover:scale-105 transition-transform">Worksheets</span>
+              </Link>
+              <Link href="/games" className="flex items-center space-x-2 text-blue-700 hover:text-teal-600 font-bold transition-colors duration-300 py-2 group">
+                <span className="text-lg">🕹️</span>
+                <span className="group-hover:scale-105 transition-transform">Games</span>
+              </Link>
+              <Link href="/resources" className="flex items-center space-x-2 text-blue-700 hover:text-teal-600 font-bold transition-colors duration-300 py-2 group">
+                <span className="text-lg">🐡</span>
+                <span className="group-hover:scale-105 transition-transform">Resources</span>
+              </Link>
+            </nav>
+
+            {/* Divider */}
+            <div className="h-8 w-px bg-blue-200" />
+
+            {/* Profile button */}
+            <UserProfileButton />
+          </div>
+
+          {/* Mobile: Profile + Hamburger */}
+          <div className="flex md:hidden items-center gap-3">
+            <UserProfileButton />
+            <MobileMenu />
+          </div>
         </div>
       </div>
     </header>

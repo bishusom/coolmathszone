@@ -3,12 +3,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Footer from '@/components/ui/Footer';
+import Layout from '@/components/ui/Layout';
 import GradeCard from '@/components/ui/GradeCard';
 import ResponsiveAd from '@/components/ResponsiveAd';
 import { getAllGradeLevels } from '@/utils/gradeHelpers';
 import { sortGrades, SortOrder } from '@/utils/sortHelpers';
-import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
+import { ContentCard, MagicButton } from '@/components/ui/PageContainer';
 
 export default function AllGradesPage() {
    const [sortOrder, setSortOrder] = useState<SortOrder>('age-asc');
@@ -16,7 +16,7 @@ export default function AllGradesPage() {
      const sortedGrades = sortGrades(allGrades, sortOrder); 
 
   return (
-    <PageContainer>
+    <Layout>
       {/* Hero Section with Grade Page Styling */}
       <section className="relative py-16 lg:py-20 overflow-hidden gradient-arctic-adventure text-white">
         <div className="absolute inset-0">
@@ -27,15 +27,6 @@ export default function AllGradesPage() {
         
         <div className="relative container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            {/* Centered Back to Home Button */}
-            <div className="flex justify-center mb-6">
-              <Link href="/">
-                <MagicButton className="text-lg">
-                  ⋆.˚ 𓇼 Back to Home
-                </MagicButton>
-              </Link>
-            </div>
-            
             <div className="text-center">
               <div className="flex items-center justify-center mb-6">
                 <span className="text-6xl mr-4">🎓</span>
@@ -98,7 +89,7 @@ export default function AllGradesPage() {
         </div>
       </section>
 
-      {/* Grade Levels Section - FIXED: Use sortedGrades instead of allGrades */}
+      {/* Grade Levels Section */}
       <section className="py-20 bg-gradient-to-br from-blue-50 to-cyan-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -111,7 +102,7 @@ export default function AllGradesPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {sortedGrades.map((grade) => ( // CHANGED: allGrades → sortedGrades
+            {sortedGrades.map((grade) => (
               <div key={grade.id} className="transform hover:scale-105 transition-transform duration-300">
                 <GradeCard grade={grade} />
               </div>
@@ -125,7 +116,7 @@ export default function AllGradesPage() {
         <div className="container mx-auto px-4">
           <ContentCard className="p-8 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">📚 Complete Math Journey</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="text-4xl font-black text-cyan-300 mb-2">{sortedGrades.length}</div>
                 <div className="text-blue-100 text-lg">Grade Levels</div>
@@ -141,26 +132,16 @@ export default function AllGradesPage() {
                 <div className="text-blue-100 text-lg">Learning Games</div>
               </div>
             </div>
-            <div className="flex justify-center">
-              <Link href="/">
-                <MagicButton className="text-lg">
-                  🏠 Return to Homepage
-                </MagicButton>
-              </Link>
-            </div>
           </ContentCard>
         </div>
       </section>
 
-      {/* Ad before footer */}
-      <section className="py-12 bg-gradient-to-r from-blue-700 to-cyan-700">
+      {/* Ad before footer area */}
+      <section className="py-12 bg-gradient-to-r from-blue-700 to-cyan-700 font-sans">
         <div className="container mx-auto px-4">
           <ResponsiveAd position="footer" />
         </div>
       </section>
-
-      {/* Footer-like Section */}
-      <Footer />
-    </PageContainer>
+    </Layout>
   );
 }

@@ -28,12 +28,6 @@
   to = "/robots.txt"
   status = 200
 
-# Next.js specific redirects for client-side routing
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 # Security headers
 [[headers]]
   for = "/*"

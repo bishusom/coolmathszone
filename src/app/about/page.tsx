@@ -4,7 +4,7 @@ import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageCon
 
 export const metadata: Metadata = {
   title: 'About Us | CoolMathsZone',
-  description: 'Meet the father-son duo behind CoolMathsZone - Bishu Som (tech developer) and Shubhang Som (math wiz) creating fun math lessons for kids',
+  description: 'Meet the team behind CoolMathsZone and learn how the platform blends playful math lessons, games, and optional accounts.',
   alternates: {
     canonical: 'https://coolmathszone.com/about',
   },
@@ -43,7 +43,7 @@ export default function AboutPage() {
               </div>
               
               <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-                A father-son duo making math magical for kids everywhere!
+                Building a playful math world where free lessons, games, and progress tracking work together.
               </p>
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function AboutPage() {
               Meet the <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">Dream Team</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Combining tech expertise with math brilliance to create the perfect learning experience
+              Combining product building, lesson design, and kid-tested gameplay into one learning experience
             </p>
           </div>
 
@@ -78,9 +78,7 @@ export default function AboutPage() {
               <h3 className="text-2xl font-bold text-white mb-2">Bishu Som</h3>
               <p className="text-cyan-300 font-semibold mb-4">Tech Developer & Dad</p>
               <p className="text-white/70 mb-4">
-                With over 15 years in software development, Bishu builds the platform that makes 
-                learning math fun and interactive. He handles all the coding, design, and 
-                technical magic behind CoolMathsZone.
+                Bishu builds the product platform behind CoolMathsZone, from the site experience and game systems to account features and SEO foundations. He focuses on making the experience feel smooth, playful, and easy to use.
               </p>
               <div className="flex justify-center space-x-4 text-white/60">
                 <span>💻 Code Wizard</span>
@@ -97,9 +95,7 @@ export default function AboutPage() {
               <h3 className="text-2xl font-bold text-white mb-2">Shubhang Som</h3>
               <p className="text-emerald-300 font-semibold mb-4">Math Wiz & Son</p>
               <p className="text-white/70 mb-4">
-                A math prodigy who creates all the lessons and exercises. Shubhang understands 
-                what makes math fun for kids and designs challenges that are both educational 
-                and entertaining.
+                Shubhang helps shape the lesson ideas, challenge flow, and what actually feels fun from a student perspective. He pressure-tests the activities so the learning stays clear without becoming dry.
               </p>
               <div className="flex justify-center space-x-4 text-white/60">
                 <span>🎯 Math Genius</span>
@@ -118,18 +114,13 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold text-white mb-6">Our Story</h2>
             <div className="max-w-3xl mx-auto text-lg text-white/80 leading-relaxed">
               <p className="mb-6">
-                CoolMathsZone started as a simple project between a dad and his son. Bishu noticed 
-                that Shubhang had a natural talent for math but found traditional worksheets boring. 
-                Together, they decided to create something different - a place where math feels like 
-                an adventure rather than homework.
+                CoolMathsZone started as a small family project. The goal was simple: build a place where math feels more like exploration than repetition, without forcing every learner into the same dry worksheet flow.
               </p>
               <p className="mb-6">
-                What began as weekend coding sessions has grown into a platform used by thousands 
-                of students. Shubhang tests every game and lesson to make sure they're actually fun, 
-                while Bishu ensures the technology works seamlessly.
+                What began as weekend experiments grew into a platform that combines structured grade-based learning, game-style practice, and optional profiles for players who want to save progress, coins, and cosmetics.
               </p>
               <p className="text-cyan-300 font-semibold">
-                Our mission: Make every child feel like a math superhero! 🦸‍♂️
+                Our mission: make math feel approachable, repeatable, and worth coming back to.
               </p>
             </div>
           </ContentCard>
@@ -152,19 +143,19 @@ export default function AboutPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-green-500/20 rounded-xl p-4 border border-green-500/30">
                   <div className="text-green-400 font-semibold mb-2">🎮 Play All Games</div>
-                  <p className="text-white/70 text-sm">Access every math game and activity for free</p>
+                  <p className="text-slate-900 text-sm">Access every math game and activity for free.</p>
                 </div>
                 <div className="bg-green-500/20 rounded-xl p-4 border border-green-500/30">
                   <div className="text-green-400 font-semibold mb-2">📚 Learn at Your Pace</div>
-                  <p className="text-white/70 text-sm">Progress through grades and topics as you're ready</p>
+                  <p className="text-slate-900 text-sm">Progress through grades and topics when you are ready.</p>
                 </div>
                 <div className="bg-green-500/20 rounded-xl p-4 border border-green-500/30">
                   <div className="text-green-400 font-semibold mb-2">🏆 Earn Achievements</div>
-                  <p className="text-white/70 text-sm">Collect badges and rewards for completing challenges</p>
+                  <p className="text-slate-900 text-sm">Collect badges and rewards for completing challenges.</p>
                 </div>
                 <div className="bg-green-500/20 rounded-xl p-4 border border-green-500/30">
                   <div className="text-green-400 font-semibold mb-2">🔄 Practice Unlimited</div>
-                  <p className="text-white/70 text-sm">Repeat exercises as many times as you need</p>
+                  <p className="text-slate-900 text-sm">Repeat exercises as many times as you need.</p>
                 </div>
               </div>
             </ContentCard>
@@ -175,19 +166,19 @@ export default function AboutPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-red-500/20 rounded-xl p-4 border border-red-500/30">
                   <div className="text-red-400 font-semibold mb-2">🚫 Copy Content</div>
-                  <p className="text-white/70 text-sm">Don't copy our lessons or games for commercial use</p>
+                  <p className="text-slate-900 text-sm">Do not copy our lessons or games for commercial use.</p>
                 </div>
                 <div className="bg-red-500/20 rounded-xl p-4 border border-red-500/30">
                   <div className="text-red-400 font-semibold mb-2">🚫 Misuse Platform</div>
-                  <p className="text-white/70 text-sm">No automated bots, scraping, or hacking attempts</p>
+                  <p className="text-slate-900 text-sm">No automated bots, scraping, or hacking attempts.</p>
                 </div>
                 <div className="bg-red-500/20 rounded-xl p-4 border border-red-500/30">
                   <div className="text-red-400 font-semibold mb-2">🚫 Claim Ownership</div>
-                  <p className="text-white/70 text-sm">Don't claim our content as your own creation</p>
+                  <p className="text-slate-900 text-sm">Do not claim our content as your own creation.</p>
                 </div>
                 <div className="bg-red-500/20 rounded-xl p-4 border border-red-500/30">
                   <div className="text-red-400 font-semibold mb-2">🚫 Redistribute</div>
-                  <p className="text-white/70 text-sm">Don't repackage or resell our educational content</p>
+                  <p className="text-slate-900 text-sm">Do not repackage or resell our educational content.</p>
                 </div>
               </div>
             </ContentCard>
@@ -201,7 +192,7 @@ export default function AboutPage() {
           <ContentCard className="p-8 text-center">
             <h2 className="text-3xl font-bold text-white mb-4">Have Questions?</h2>
             <p className="text-white/70 text-lg mb-6 max-w-2xl mx-auto">
-              We'd love to hear from you! Whether you have feedback, found a bug, or just want to say hello, 
+              We&apos;d love to hear from you! Whether you have feedback, found a bug, or just want to say hello, 
               reach out to the dad-and-son team.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -210,9 +201,11 @@ export default function AboutPage() {
                   ⋆.˚ 𓇼 Back to Home
                 </MagicButton>
               </Link>
-              <button className="border-2 border-cyan-300 text-white font-bold px-6 py-3 rounded-2xl hover:bg-cyan-300 hover:text-blue-600 transition-all duration-300 bg-white/10 backdrop-blur-sm">
-                📧 Contact Us
-              </button>
+              <Link href="/contact">
+                <button className="border-2 border-cyan-300 text-white font-bold px-6 py-3 rounded-2xl hover:bg-cyan-300 hover:text-blue-600 transition-all duration-300 bg-white/10 backdrop-blur-sm">
+                  📧 Contact Us
+                </button>
+              </Link>
             </div>
           </ContentCard>
         </div>

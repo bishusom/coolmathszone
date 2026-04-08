@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from 'next/script';
 import { GoogleAnalytics } from '@next/third-parties/google'
-import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
+import './globals.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,11 +17,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Cool Maths Zone ✖️➗➕➖🟰 | Fun Math Games & Learning Resources for Kids',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://coolmathszone.com'),
+  title: 'Cool Maths Zone | Fun Math Games and Learning Resources for Kids',
   description: 'Cool Maths Zone - Fun math games and educational resources for all ages! Enjoy interactive number games, arithmetic challenges, math worksheets, and learning guides. Perfect for kindergarten to middle & secondary school students learning mathematics.',
   keywords:  'cool math games, fun math games, math learning, math worksheets, number games, math puzzles, arithmetic games, algebra games, kids math games, math education',
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
-    title: 'Cool Maths Zone ✖️➗➕➖🟰 | Fun Math Games & Learning Resources for Kids',
+    title: 'Cool Maths Zone | Fun Math Games and Learning Resources for Kids',
     description: 'Cool Maths Zone - Fun math games and educational resources for all ages! Enjoy interactive number games, arithmetic challenges, math worksheets, and learning guides. Perfect for kindergarten to middle & secondary school students learning mathematics.',
     url: 'https://coolmathszone.com',
     siteName: 'Cool Maths Zone',
@@ -37,9 +43,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cool Maths Zone ✖️➗➕➖🟰 | Fun Math Games & Learning Resources for Kids',
+    title: 'Cool Maths Zone | Fun Math Games and Learning Resources for Kids',
     description: 'Cool Maths Zone - Fun math games and educational resources for all ages! Enjoy interactive number games, arithmetic challenges, math worksheets, and learning guides. Perfect for kindergarten to middle & secondary school students learning mathematics.',
-    images: ['https://coolmathszone.com/og-image.png'],
+    images: ['https://coolmathszone.com/cmz-og.png'],
   },
   alternates: {
     canonical: 'https://coolmathszone.com',
@@ -49,37 +55,33 @@ export const metadata: Metadata = {
 // Replace with your actual Google Analytics measurement ID
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-24LDGPFLX4';
 
-// Schema.org Structured Data - Organized as a JavaScript object
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://coolmathszone.com'
+
+// Keep schema conservative and tied to real assets.
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Cool Maths Zone",
-  "url": "https://coolmathszone.com/",
-  "description": "Interactive mathematics game platform offering fun math challenges and educational resources for children aged 4-14 years.",
-  "operatingSystem": "Web",
-  "applicationCategory": "EducationalGame",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "1500"
-  },
-  "screenshot": [
-    "https://coolmathszone.com/images/screenshot1.jpg",
-    "https://coolmathszone.com/images/screenshot2.jpg"
-  ],
-  "publisher": {
-    "@type": "Organization",
-    "name": "Cool Maths Zone",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://coolmathszone.com/images/cmz-logo-light.png"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "name": "Cool Maths Zone",
+      "url": `${siteUrl}/`,
+      "description": "Fun math games and learning resources for kids.",
+      "publisher": {
+        "@id": `${siteUrl}/#organization`
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
+      "name": "Cool Maths Zone",
+      "url": `${siteUrl}/`,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${siteUrl}/cmz-logo.webp`
+      }
     }
-  }
+  ]
 };
 
 export default function RootLayout({
@@ -110,7 +112,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
       <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
     </html>

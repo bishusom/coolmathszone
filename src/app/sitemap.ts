@@ -2,7 +2,6 @@
 import { MetadataRoute } from 'next'
 import { gradeLevels } from '@/data/syllabus'
 import { resourceCategories } from '@/data/resources'
-import { resourceData } from '@/data/resources-strategies'
 
 // Base URL - update this to your actual domain
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://coolmathszone.com'
@@ -25,10 +24,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
+      url: `${baseUrl}/terms`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    {
       url: `${baseUrl}/contact`,
       lastModified: currentDate,
       changeFrequency: 'monthly' as const,
       priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/games`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/grades`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/exercises`,
@@ -104,7 +121,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     }))
   )
-
+  
+  // Game Routes
+  const gameSlugs = [
+    'math-popper', 'algebra-dash', 'fraction-slicer', 'logic-link',
+    'prime-protector', 'slope-slider', 'angle-archer', 'binary-bridge',
+    'root-reaper', 'operator-overload'
+  ]
+  const gameRoutes = gameSlugs.map((slug): MetadataRoute.Sitemap[0] => ({
+    url: `${baseUrl}/games/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
+  
   // Combine all routes
   return [
     ...staticRoutes,
@@ -113,5 +143,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...resourceCategoryRoutes,
     ...worksheetGradeRoutes,
     ...worksheetTopicRoutes,
+    ...gameRoutes,
   ]
 }

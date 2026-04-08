@@ -28,7 +28,7 @@ export default function ContactPage() {
       } else {
         setStatus('error');
       }
-    } catch (error) {
+    } catch {
       setStatus('error');
     }
   };
@@ -39,7 +39,7 @@ export default function ContactPage() {
         <div className="text-4xl mb-4">🎉</div>
         <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
         <p className="text-white/70">
-          Thanks for reaching out! We'll get back to you within 24 hours.
+          Thanks for reaching out! We&apos;ll get back to you within 24 hours.
         </p>
         <button
           onClick={() => setStatus('idle')}
@@ -83,7 +83,7 @@ export default function ContactPage() {
               </div>
               
               <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-                We'd love to hear from you! Questions, feedback, or just want to say hello?
+                We&apos;d love to hear from you! Questions, feedback, or just want to say hello?
               </p>
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function ContactPage() {
               Before contacting us, you might find answers in these places:
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 max-w-5xl mx-auto">
               <Link href="/about" className="block">
                 <div className="bg-white/10 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40">
                   <div className="text-3xl mb-3">👨‍👦</div>
@@ -210,6 +210,14 @@ export default function ContactPage() {
                   <div className="text-3xl mb-3">📚</div>
                   <h3 className="text-xl font-semibold text-white mb-2">All Grades</h3>
                   <p className="text-white/70 text-sm">Browse all available math topics</p>
+                </div>
+              </Link>
+
+              <Link href="/games" className="block">
+                <div className="bg-white/10 rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40">
+                  <div className="text-3xl mb-3">🎮</div>
+                  <h3 className="text-xl font-semibold text-white mb-2">Games</h3>
+                  <p className="text-white/70 text-sm">Jump into the arcade and practice by playing</p>
                 </div>
               </Link>
               

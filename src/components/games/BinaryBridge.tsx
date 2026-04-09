@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
+import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -11,6 +13,8 @@ import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
  */
 export default function BinaryBridge() {
   const { updateProgress } = useAuth();
+  const { triggerPrompt } = useMeaningfulSuccessPrompt();
+  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
   const { activeSkinEmoji } = useUnlocks();
   const { bindCursorAvatar, pointerPosition, showPointerSkin } = useCursorAvatar();
 
@@ -89,6 +93,11 @@ export default function BinaryBridge() {
     setScore(0);
     setCoins(0);
     setFeedback(null);
+    trackStart({
+      use_hex: useHex ? 1 : 0,
+      use_logic: useLogic ? 1 : 0,
+      use_signed: useSigned ? 1 : 0,
+    });
     generateTarget();
   };
 
@@ -118,6 +127,8 @@ export default function BinaryBridge() {
         clearInterval(interval);
         setScore(s => s + 250);
         setCoins(c => c + 15);
+        triggerPrompt();
+        trackWin({ score: score + 250, coins: coins + 15 });
         setIsCrossing(false);
         setCharPos(0);
         generateTarget();
@@ -129,6 +140,7 @@ export default function BinaryBridge() {
   const handleFailure = () => {
     setIsFalling(true);
     setFeedback("⚠️ STACK OVERFLOW! SYSTEM COLLAPSE.");
+    trackGameOver({ score, coins, reason: "wrong_solution" });
     updateProgress(coins, Math.floor(score / 100));
     setTimeout(() => {
       setGameState("GAMEOVER");

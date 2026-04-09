@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
+import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -11,6 +13,8 @@ import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
  */
 export default function AngleArcher() {
   const { updateProgress } = useAuth();
+  const { triggerPrompt } = useMeaningfulSuccessPrompt();
+  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
   const { activeSkinEmoji } = useUnlocks();
   const { bindCursorAvatar, pointerPosition, showPointerSkin } = useCursorAvatar();
 
@@ -57,6 +61,7 @@ export default function AngleArcher() {
     setGameState("PLAYING");
     setScore(0);
     setCoins(0);
+    trackStart({ difficulty });
     resetAttempt();
     generateTarget();
   };
@@ -122,6 +127,8 @@ export default function AngleArcher() {
     setFeedback("🏹 BULLSEYE! +100");
     setScore(s => s + 100);
     setCoins(c => c + 5);
+    triggerPrompt();
+    trackWin({ score: score + 100, coins: coins + 5, difficulty });
     setIsFlying(false);
     setTimeout(() => {
       resetAttempt();
@@ -131,6 +138,7 @@ export default function AngleArcher() {
 
   const handleMiss = () => {
     setFeedback(arrow.x < target.x ? "Short! Try higher angle." : "Long! Try lower angle.");
+    trackGameOver({ score, coins, difficulty, reason: "miss" });
     updateProgress(coins, Math.floor(score / 100));
     setIsFlying(false);
     setTimeout(() => resetAttempt(), 2000);

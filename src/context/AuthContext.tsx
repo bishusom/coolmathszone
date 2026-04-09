@@ -2,6 +2,9 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabaseClient'
 import { User } from '@supabase/supabase-js'
+import { trackAuthSignupCompleted } from '@/utils/analytics'
+
+const PENDING_AUTH_EVENT_KEY = 'cmz_pending_auth_event'
 
 export interface Profile {
   username: string | null
@@ -113,7 +116,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
-      if (session?.user) fetchProfile(session.user.id)
+      if (session?.user) {
+        fetchProfile(session.user.id)
+        if (typeof window !== 'undefined') {
+          const pendingAuthEvent = window.sessionStorage.getItem(PENDING_AUTH_EVENT_KEY)
+          if (pendingAuthEvent) {
+            try {
+              const details = JSON.parse(pendingAuthEvent) as Record<string, string>
+              trackAuthSignupCompleted({
+                ...details,
+                completion_state: 'authenticated',
+              })
+            } catch {
+              trackAuthSignupCompleted({
+                source: 'game_prompt',
+                completion_state: 'authenticated',
+              })
+            }
+            window.sessionStorage.removeItem(PENDING_AUTH_EVENT_KEY)
+          }
+        }
+      }
       else setProfile(null)
     })
     return () => subscription.unsubscribe()

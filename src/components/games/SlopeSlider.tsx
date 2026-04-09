@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
+import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -11,6 +13,8 @@ import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
  */
 export default function SlopeSlider() {
   const { updateProgress } = useAuth();
+  const { triggerPrompt } = useMeaningfulSuccessPrompt();
+  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
   const { activeSkinEmoji } = useUnlocks();
   const { bindCursorAvatar, pointerPosition, showPointerSkin } = useCursorAvatar();
 
@@ -62,6 +66,7 @@ export default function SlopeSlider() {
     setGameState("PLAYING");
     setScore(0);
     setCoins(0);
+    trackStart({ difficulty });
     resetAttempt();
     generateTarget();
   };
@@ -123,6 +128,8 @@ export default function SlopeSlider() {
     setFeedback("🎯 PERFECT LANDING!");
     setScore(s => s + 100);
     setCoins(c => c + 5);
+    triggerPrompt();
+    trackWin({ score: score + 100, coins: coins + 5, difficulty });
     setTimeout(() => {
       resetAttempt();
       generateTarget();
@@ -131,6 +138,7 @@ export default function SlopeSlider() {
 
   const handleFail = () => {
     setFeedback("💥 CRASHED! Try adjusting m or c.");
+    trackGameOver({ score, coins, difficulty, reason: "crash" });
     updateProgress(coins, Math.floor(score / 100));
     setTimeout(() => resetAttempt(), 1500);
   };

@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
+import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
 import { useUnlocks } from "@/hooks/useUnlocks";
 
 export interface GameProblem {
@@ -33,6 +35,8 @@ let obstacleId = 0;
 
 export function GameEngine({ title, description, generateProblem, getTierInfo, colors }: GameEngineProps) {
   const { updateProgress } = useAuth();
+  const { triggerPrompt } = useMeaningfulSuccessPrompt();
+  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
   const { activeSkinEmoji } = useUnlocks();
 
   
@@ -131,6 +135,8 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
             setScore((s) => s + gain);
             setCoins((c) => c + 1);
             setCombo((c) => c + 1);
+            triggerPrompt();
+            trackWin({ score: scoreRef.current + gain, coins: coinsRef.current + 1, difficulty: difficultyRef.current });
             spawnFlash("rgba(52, 211, 153, 0.4)"); // emerald
             spawnParticles(obs.lane, true);
             const nextProblem = generateProblem(scoreRef.current + gain);
@@ -147,6 +153,7 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
             setCombo(0);
             setTimeout(() => setShakeScreen(false), 400);
             setScore((s) => Math.max(0, s - 50));
+            trackGameOver({ score: scoreRef.current, coins: coinsRef.current, difficulty: difficultyRef.current, reason: "wrong_answer" });
             updateProgress(coinsRef.current, Math.floor(Math.max(0, scoreRef.current - 50) / 100));
             gameStateRef.current = "GAMEOVER";
             setGameState("GAMEOVER");
@@ -165,7 +172,7 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
     setBgGrid((grid) => (grid + speed * 0.5) % TILE_H);
 
     rafRef.current = requestAnimationFrame(gameLoop);
-  }, [generateProblem]);
+  }, [generateProblem, trackGameOver, trackWin, triggerPrompt, updateProgress]);
 
   // ── Spawn obstacles ──────────────────────────────────────────────────────────
   const spawnObstacles = useCallback(() => {
@@ -202,6 +209,7 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
     scoreRef.current = 0;
     gameStateRef.current = "PLAYING";
     setGameState("PLAYING");
+    trackStart({ difficulty: difficultyRef.current });
 
     setTimeout(() => {
       spawnObstacles();

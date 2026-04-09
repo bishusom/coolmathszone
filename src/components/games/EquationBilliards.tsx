@@ -2,6 +2,8 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
+import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
 import { useUnlocks } from "@/hooks/useUnlocks";
 
 type GameState = "START" | "PLAYING" | "GAMEOVER";
@@ -367,6 +369,8 @@ function resolvePhysics(balls: PhysicsBall[], dt: number) {
 
 export default function EquationBilliards() {
   const { updateProgress } = useAuth();
+  const { triggerPrompt } = useMeaningfulSuccessPrompt();
+  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
   const { activeSkinEmoji } = useUnlocks();
   const [gameState, setGameState] = useState<GameState>("START");
   const [score, setScore] = useState(0);
@@ -397,13 +401,14 @@ export default function EquationBilliards() {
 
     gameStateRef.current = "GAMEOVER";
     setGameState("GAMEOVER");
+    trackGameOver({ score: scoreRef.current, coins: coinsRef.current, level, reason: "out_of_lives_or_timeout" });
     void updateProgress(coinsRef.current, Math.floor(scoreRef.current / 100));
 
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
     rafRef.current = null;
-  }, [updateProgress]);
+  }, [level, trackGameOver, updateProgress]);
 
   const loadProblem = useCallback((nextLevel: number) => {
     const nextProblem = createProblem(nextLevel);
@@ -435,6 +440,8 @@ export default function EquationBilliards() {
       clearsRef.current = nextClears;
       setScore(nextScore);
       setCoins(nextCoins);
+      triggerPrompt();
+      trackWin({ score: nextScore, coins: nextCoins, level: problemRef.current.level });
       setStatusText(`Clean shot. +${bonus} score`);
       loadProblem(nextLevel);
       return;
@@ -451,7 +458,7 @@ export default function EquationBilliards() {
     }
 
     loadProblem(level);
-  }, [endGame, level, loadProblem, timeLeft]);
+  }, [endGame, level, loadProblem, timeLeft, trackWin, triggerPrompt]);
 
   const handleBallClick = useCallback((value: number) => {
     if (gameStateRef.current !== "PLAYING") {
@@ -483,8 +490,9 @@ export default function EquationBilliards() {
     setStatusText("Opening break. Read fast and strike clean.");
     questionEndsAtRef.current = performance.now() + firstProblem.timerMs;
     slowUntilRef.current = performance.now() + 700;
+    trackStart({ level: 1 });
 
-  }, []);
+  }, [trackStart]);
 
   useEffect(() => {
     if (gameState !== "PLAYING") {

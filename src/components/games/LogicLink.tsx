@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
+import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -93,6 +95,8 @@ function computePathValue(path: Node[], op: "sum" | "product"): number {
 
 export default function LogicLink() {
   const { updateProgress } = useAuth();
+  const { triggerPrompt } = useMeaningfulSuccessPrompt();
+  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
   const { activeSkinEmoji } = useUnlocks();
   const { bindCursorAvatar, pointerPosition, showPointerSkin } = useCursorAvatar();
   const [gameState, setGameState] = useState<GameState>("START");
@@ -150,6 +154,8 @@ export default function LogicLink() {
       const gain = 150 + Math.floor(scoreRef.current / 400) * 75 + (path.length * 20);
       setScore(s => s + gain);
       setCoins(c => c + 1);
+      triggerPrompt();
+      trackWin({ score: scoreRef.current + gain, coins: coinsRef.current + 1, difficulty });
       setFlash("correct");
       setTimeout(() => {
         setFlash(null);
@@ -164,6 +170,7 @@ export default function LogicLink() {
       setLives(l => {
         const next = l - 1;
         if (next <= 0) {
+          trackGameOver({ score: scoreRef.current, coins: coinsRef.current, difficulty, reason: "out_of_lives" });
           updateProgress(coinsRef.current, Math.floor(scoreRef.current / 100));
           setTimeout(() => setGameState("GAMEOVER"), 600);
         }
@@ -171,7 +178,7 @@ export default function LogicLink() {
       });
       setTimeout(() => { setFlash(null); setShake(false); setPath([]); }, 700);
     }
-  }, [gameState, path, puzzle, updateProgress, difficulty]);
+  }, [gameState, path, puzzle, trackGameOver, trackWin, updateProgress, difficulty, triggerPrompt]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -188,6 +195,7 @@ export default function LogicLink() {
     const hints = difficulty === "easy" ? 3 : difficulty === "hard" ? 0 : 1;
     setHintsRemaining(hints);
     setPuzzle(generatePuzzle(0, difficulty)); setGameState("PLAYING");
+    trackStart({ difficulty });
   };
 
   const flashBg = flash === "correct" ? "rgba(52,211,153,0.4)" : flash === "wrong" ? "rgba(239,68,68,0.5)" : null;

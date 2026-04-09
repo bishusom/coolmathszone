@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Layout from '@/components/ui/Layout'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import { GameAuthGuard } from '@/components/auth/GameAuthGuard'
+import { GameAnalyticsProvider } from '@/components/games/GameAnalyticsContext'
 import { getAdjacentGames, getGameBySlug, getRelatedGames } from '@/data/games'
 
 interface GamePageShellProps {
@@ -85,9 +86,11 @@ export default function GamePageShell({ slug, children }: GamePageShellProps) {
         </div>
 
         <div className="w-full px-0 md:px-2">
-          <GameAuthGuard>
-            {children}
-          </GameAuthGuard>
+          <GameAnalyticsProvider game={game}>
+            <GameAuthGuard>
+              {children}
+            </GameAuthGuard>
+          </GameAnalyticsProvider>
         </div>
 
         <div className="mt-12 rounded-[2rem] border border-dashed border-cyan-300/30 bg-white p-6 text-center shadow-lg">

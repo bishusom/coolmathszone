@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
+import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -51,6 +53,8 @@ export interface PopperEngineProps {
  */
 export function PopperEngine({ title, description, generateProblem, getTierInfo, colors }: PopperEngineProps) {
   const { updateProgress } = useAuth();
+  const { triggerPrompt } = useMeaningfulSuccessPrompt();
+  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
   const { activeSkinEmoji } = useUnlocks();
   
   const defaultColors = {
@@ -72,12 +76,14 @@ export function PopperEngine({ title, description, generateProblem, getTierInfo,
 
   const gameStateRef = useRef(gameState);
   const scoreRef = useRef(score);
+  const coinsRef = useRef(coins);
   const problemRef = useRef(problem);
   const rafRef = useRef<number | null>(null);
   const spawnRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   gameStateRef.current = gameState;
   scoreRef.current = score;
+  coinsRef.current = coins;
   problemRef.current = problem;
 
   // -- Mechanics --
@@ -118,6 +124,8 @@ export function PopperEngine({ title, description, generateProblem, getTierInfo,
       const gain = 150;
       setScore(s => s + gain);
       setCoins(c => c + 2);
+      triggerPrompt();
+      trackWin({ score: scoreRef.current + gain, coins: coinsRef.current + 2 });
       const nextProb = generateProblem(scoreRef.current + gain);
       setProblem(nextProb);
       problemRef.current = nextProb;
@@ -140,6 +148,7 @@ export function PopperEngine({ title, description, generateProblem, getTierInfo,
   const endGame = () => {
     gameStateRef.current = "GAMEOVER";
     setGameState("GAMEOVER");
+    trackGameOver({ score: scoreRef.current, coins: coinsRef.current, reason: "out_of_lives" });
     updateProgress(coins, Math.floor(score / 100));
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     if (spawnRef.current) clearInterval(spawnRef.current);
@@ -191,6 +200,7 @@ export function PopperEngine({ title, description, generateProblem, getTierInfo,
     problemRef.current = p;
     gameStateRef.current = "PLAYING";
     setGameState("PLAYING");
+    trackStart();
 
     spawnBubbles();
     spawnRef.current = setInterval(() => {

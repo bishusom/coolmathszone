@@ -13,7 +13,13 @@ import {
   trackTopicMastery,
   trackError,
   trackPracticeSetRestart,
-  trackTopicSelection
+  trackTopicSelection,
+  trackGameStart,
+  trackGameWin,
+  trackGameOver,
+  trackAuthPromptShown,
+  trackAuthSignupStarted,
+  trackAuthSignupCompleted
 } from '@/utils/analytics';
 
 export const useAnalytics = () => {
@@ -42,6 +48,16 @@ export const useAnalytics = () => {
     
     // Engagement events
     trackPracticeSetRestart,
-    trackTopicSelection
+    trackTopicSelection,
+
+    // Game events
+    trackGameStart,
+    trackGameWin,
+    trackGameOver,
+
+    // Auth funnel events
+    trackAuthPromptShown,
+    trackAuthSignupStarted,
+    trackAuthSignupCompleted
   };
 };

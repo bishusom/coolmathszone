@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
+import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -50,6 +52,8 @@ function generatePuzzle(score: number, difficulty: Difficulty = "medium"): Puzzl
 
 export default function FractionSlicer() {
   const { updateProgress } = useAuth();
+  const { triggerPrompt } = useMeaningfulSuccessPrompt();
+  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
   const { activeSkinEmoji } = useUnlocks();
   const { bindCursorAvatar, pointerPosition, showPointerSkin } = useCursorAvatar();
   const [gameState, setGameState] = useState<GameState>("START");
@@ -142,6 +146,8 @@ export default function FractionSlicer() {
       const gain = 100 + Math.floor(scoreRef.current / 300) * 50;
       setScore(s => s + gain);
       setCoins(c => c + 1);
+      triggerPrompt();
+      trackWin({ score: scoreRef.current + gain, coins: coinsRef.current + 1, difficulty });
       setFlash("correct");
       setTimeout(() => { setFlash(null); resetRound(generatePuzzle(scoreRef.current + gain, difficulty)); }, 700);
     } else {
@@ -150,6 +156,7 @@ export default function FractionSlicer() {
       setLives(l => {
         const next = l - 1;
         if (next <= 0) {
+          trackGameOver({ score: scoreRef.current, coins: coinsRef.current, difficulty, reason: "out_of_lives" });
           updateProgress(coinsRef.current, Math.floor(scoreRef.current / 100));
           setTimeout(() => setGameState("GAMEOVER"), 600);
         }
@@ -157,7 +164,7 @@ export default function FractionSlicer() {
       });
       setTimeout(() => { setFlash(null); setShake(false); resetRound(); }, 700);
     }
-  }, [gameState, phase, puzzle, selectedSections, slices, resetRound, updateProgress, difficulty]);
+  }, [gameState, phase, puzzle, selectedSections, slices, resetRound, trackGameOver, trackWin, updateProgress, difficulty, triggerPrompt]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -173,6 +180,7 @@ export default function FractionSlicer() {
     const hints = difficulty === "easy" ? 3 : difficulty === "hard" ? 0 : 1;
     setHintsRemaining(hints);
     resetRound(generatePuzzle(0, difficulty));
+    trackStart({ difficulty });
   };
 
   const sortedSlices = [...slices].sort((a, b) => a.position - b.position);

@@ -1,12 +1,14 @@
 // utils/analytics.ts
+import type { GameEntry } from '@/data/games'
+
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (...args: unknown[]) => void;
   }
 }
 
 // GA4 Event Tracking
-export const trackEvent = (eventName: string, parameters: Record<string, any> = {}) => {
+export const trackEvent = (eventName: string, parameters: Record<string, unknown> = {}) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', eventName, {
       ...parameters,
@@ -132,7 +134,7 @@ export const trackTopicMastery = (grade: string, topic: string, masteryPercentag
 };
 
 // Error Tracking
-export const trackError = (errorType: string, errorMessage: string, context: Record<string, any> = {}) => {
+export const trackError = (errorType: string, errorMessage: string, context: Record<string, unknown> = {}) => {
   trackEvent('error_occurred', {
     error_type: errorType,
     error_message: errorMessage,
@@ -154,3 +156,36 @@ export const trackTopicSelection = (grade: string, topic: string) => {
     topic_area: topic
   });
 };
+
+const buildGameEventParams = (game: GameEntry, details: Record<string, string | number>) => ({
+  game_slug: game.slug,
+  game_title: game.title,
+  game_skill: game.skill,
+  game_grade: game.grade,
+  game_difficulty: game.difficulty,
+  ...details,
+})
+
+export const trackGameStart = (game: GameEntry, details: Record<string, string | number> = {}) => {
+  trackEvent('game_start', buildGameEventParams(game, details))
+}
+
+export const trackGameWin = (game: GameEntry, details: Record<string, string | number> = {}) => {
+  trackEvent('game_win', buildGameEventParams(game, details))
+}
+
+export const trackGameOver = (game: GameEntry, details: Record<string, string | number> = {}) => {
+  trackEvent('game_over', buildGameEventParams(game, details))
+}
+
+export const trackAuthPromptShown = (details: Record<string, string | number> = {}) => {
+  trackEvent('auth_prompt_shown', details)
+}
+
+export const trackAuthSignupStarted = (details: Record<string, string | number> = {}) => {
+  trackEvent('auth_signup_started', details)
+}
+
+export const trackAuthSignupCompleted = (details: Record<string, string | number> = {}) => {
+  trackEvent('auth_signup_completed', details)
+}

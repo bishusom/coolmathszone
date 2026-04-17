@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
 import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
+import GameScoreSaveBadge from "@/components/games/GameScoreSaveBadge";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -140,7 +141,8 @@ export default function SlopeSlider() {
     setFeedback("💥 CRASHED! Try adjusting m or c.");
     trackGameOver({ score, coins, difficulty, reason: "crash" });
     updateProgress(coins, Math.floor(score / 100));
-    setTimeout(() => resetAttempt(), 1500);
+    setGameState("GAMEOVER");
+    setShip((current) => ({ ...current, isAirborne: false }));
   };
 
   // Cleanup
@@ -178,6 +180,16 @@ export default function SlopeSlider() {
             ))}
           </div>
           <button onClick={startGame} style={{ padding: "16px 48px", fontSize: 18, fontWeight: 900, borderRadius: 50, border: "none", background: "linear-gradient(90deg, #facc15, #fb923c)", color: "white", cursor: "pointer", textTransform: "uppercase" }}>Start Mission</button>
+        </div>
+      ) : gameState === "GAMEOVER" ? (
+        <div style={{ height: 400, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 }}>
+          <div style={{ fontSize: 64 }}>💥</div>
+          <h3 style={{ fontSize: 28, fontWeight: 900, color: "#fecaca", margin: 0 }}>MISSION FAILED</h3>
+          <p style={{ color: "rgba(255,255,255,0.7)", textAlign: "center", maxWidth: 300 }}>
+            The ship crashed before reaching the landing zone. Final score {score.toLocaleString()}.
+          </p>
+          <GameScoreSaveBadge className="mt-1" />
+          <button onClick={startGame} style={{ padding: "16px 48px", fontSize: 18, fontWeight: 900, borderRadius: 50, border: "none", background: "linear-gradient(90deg, #facc15, #fb923c)", color: "white", cursor: "pointer", textTransform: "uppercase" }}>Retry Mission</button>
         </div>
       ) : (
         <>

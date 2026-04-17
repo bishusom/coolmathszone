@@ -18,6 +18,32 @@ export type GameEntry = {
 
 export const games: GameEntry[] = [
   {
+    slug: 'function-tiles',
+    title: 'Function Tiles',
+    heading: 'Function Tiles Match-Up',
+    description: 'Match function cards to their outputs in a tile-based memory challenge. Build fluency with inputs, outputs, and algebra rules.',
+    difficulty: 'Intermediate',
+    grade: 'Middle School',
+    icon: '🧩',
+    color: 'from-cyan-400 to-indigo-600',
+    buttonColor: 'bg-cyan-600 hover:bg-cyan-500',
+    skill: 'Functions and Outputs',
+    howToPlay: 'Flip two tiles at a time and match each function card with its correct output. Clear the board to level up and watch the tile count rise.',
+  },
+  {
+    slug: 'number-scramble',
+    title: 'Number Scramble',
+    heading: 'Number Scramble Tiles',
+    description: 'Rearrange number tiles into sequence on easy mode, then build target numbers with operators and brackets on medium and hard.',
+    difficulty: 'Beginner',
+    grade: 'Elementary',
+    icon: '🔀',
+    color: 'from-amber-400 to-orange-600',
+    buttonColor: 'bg-amber-600 hover:bg-amber-500',
+    skill: 'Ordering and Target Numbers',
+    howToPlay: 'Easy mode is a sequence puzzle. Medium and hard switch to target-number rounds where you use numbers, operators, and brackets to build the answer.',
+  },
+  {
     slug: 'math-popper',
     title: 'Math Popper',
     heading: 'Math Popper Challenge',

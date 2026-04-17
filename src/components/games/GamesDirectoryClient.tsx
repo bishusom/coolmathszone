@@ -134,54 +134,54 @@ export default function GamesDirectoryClient() {
           </div>
         </section>
 
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-10">
           {sortedGroups.map((group) => (
             <section key={group.key}>
-              <div className="mb-6 flex flex-col gap-2">
+              <div className="mb-5 flex flex-col gap-2">
                 <div className="flex items-center gap-3">
-                  <h2 className="text-3xl font-black text-white">
+                  <h2 className="text-2xl font-black text-white md:text-3xl">
                     {group.label}
                   </h2>
-                  <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-cyan-100">
+                  <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-100">
                     {group.games.length} games
                   </span>
                 </div>
-                <p className="text-slate-200">
+                <p className="max-w-2xl text-sm leading-relaxed text-slate-200 md:text-base">
                   {group.description}
                 </p>
               </div>
 
-              <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2">
+              <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                 {group.games.map((game) => (
                   <div
                     key={game.slug}
-                    className="group relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/40 p-8 backdrop-blur-xl transition-all duration-500 hover:border-white/20 hover:shadow-2xl hover:shadow-indigo-500/10"
+                    className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/40 p-5 backdrop-blur-xl transition-all duration-500 hover:border-white/20 hover:shadow-2xl hover:shadow-indigo-500/10 md:p-6"
                   >
-                    <div className={`absolute -right-24 -top-24 h-48 w-48 bg-gradient-to-br ${game.color} opacity-10 blur-3xl transition-opacity duration-500 group-hover:opacity-20`} />
+                    <div className={`absolute -right-20 -top-20 h-36 w-36 bg-gradient-to-br ${game.color} opacity-10 blur-3xl transition-opacity duration-500 group-hover:opacity-20 md:h-40 md:w-40`} />
                     <div className={`absolute left-0 top-0 h-1 w-full bg-gradient-to-r ${game.color} opacity-50`} />
 
-                    <div className="mb-6 flex items-start justify-between">
-                      <div className={`flex h-16 w-16 transform items-center justify-center rounded-2xl bg-gradient-to-br ${game.color} text-4xl text-white shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-3`}>
+                    <div className="mb-4 flex items-start justify-between">
+                      <div className={`flex h-12 w-12 transform items-center justify-center rounded-2xl bg-gradient-to-br ${game.color} text-2xl text-white shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 md:h-14 md:w-14 md:text-3xl`}>
                         {game.icon}
                       </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <div className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-cyan-100 backdrop-blur-md">
+                      <div className="flex flex-col items-end gap-1.5">
+                        <div className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-cyan-100 backdrop-blur-md">
                           {game.difficulty}
                         </div>
-                        <div className="rounded-full border border-white/10 bg-white/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-200 backdrop-blur-md">
+                        <div className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-indigo-200 backdrop-blur-md">
                           {game.grade}
                         </div>
                       </div>
                     </div>
 
-                    <h3 className="mb-3 text-3xl font-black text-white transition-colors group-hover:text-indigo-200">{game.title}</h3>
-                    <p className="mb-3 text-sm font-black uppercase tracking-[0.2em] text-cyan-200">{game.skill}</p>
-                    <p className="mb-8 min-h-[72px] text-lg leading-relaxed text-white/70 lg:text-base">
+                    <h3 className="mb-2 text-2xl font-black text-white transition-colors group-hover:text-indigo-200">{game.title}</h3>
+                    <p className="mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-cyan-200 md:text-xs">{game.skill}</p>
+                    <p className="mb-5 min-h-[56px] text-sm leading-relaxed text-white/70 md:text-[15px]">
                       {game.description}
                     </p>
 
                     <Link href={`/games/${game.slug}`}>
-                      <button className={`w-full rounded-2xl py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 active:scale-95 ${game.buttonColor}`}>
+                      <button className={`w-full rounded-2xl py-3 text-base font-bold text-white shadow-lg transition-all duration-300 active:scale-95 ${game.buttonColor}`}>
                         Play Game →
                       </button>
                     </Link>

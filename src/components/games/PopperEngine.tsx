@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
 import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
+import GameScoreSaveBadge from "@/components/games/GameScoreSaveBadge";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -316,6 +317,7 @@ export function PopperEngine({ title, description, generateProblem, getTierInfo,
                 <h2 style={{ fontSize: 40, fontWeight: 900, color: "#fca5a5", marginBottom: 20 }}>BURST!</h2>
                 <div style={{ fontSize: 50, fontWeight: 900, color: "white", marginBottom: 8 }}>{score.toLocaleString()}</div>
                 <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, fontWeight: 700, letterSpacing: 2, marginBottom: 32 }}>FINAL SCORE</div>
+                <GameScoreSaveBadge className="mb-2" />
                 <button onClick={startGame} style={{ padding: "16px 48px", fontSize: 20, fontWeight: 900, borderRadius: 50, border: "none", background: "linear-gradient(90deg, #ec4899, #ef4444)", color: "white", cursor: "pointer", letterSpacing: 1 }}>TRY AGAIN</button>
               </div>
             </div>

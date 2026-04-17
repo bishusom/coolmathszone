@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
 import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
+import GameScoreSaveBadge from "@/components/games/GameScoreSaveBadge";
 import { useUnlocks } from "@/hooks/useUnlocks";
 
 export interface GameProblem {
@@ -29,9 +30,29 @@ const TILE_H = 12; // % of track height per tile
 const SPAWN_Y = -5;
 const HIT_Y = 80;
 const HIT_TOLERANCE = 15;
-const BASE_SPEED = 0.22;
 
 let obstacleId = 0;
+
+type Obstacle = {
+  id: string;
+  groupId: number;
+  lane: number;
+  y: number;
+  val: string | number;
+  isCorrect: boolean;
+  hit: boolean;
+};
+
+type Particle = {
+  id: string;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  color: string;
+  size: number;
+  life: number;
+};
 
 export function GameEngine({ title, description, generateProblem, getTierInfo, colors }: GameEngineProps) {
   const { updateProgress } = useAuth();
@@ -57,8 +78,8 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
   const [combo, setCombo] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [problem, setProblem] = useState<GameProblem>(() => generateProblem(0));
-  const [obstacles, setObstacles] = useState<any[]>([]);
-  const [particles, setParticles] = useState<any[]>([]);
+  const [obstacles, setObstacles] = useState<Obstacle[]>([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
   const [bgGrid, setBgGrid] = useState(0); // For scrolling the neon grid
   
   const [shakeScreen, setShakeScreen] = useState(false);
@@ -71,7 +92,7 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
   const gameStateRef = useRef(gameState);
   const difficultyRef = useRef(difficulty);
   const rafRef = useRef<number | null>(null);
-  const spawnRef = useRef<any>(null);
+  const spawnRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   laneRef.current = lane;
   scoreRef.current = score;
@@ -159,7 +180,10 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
             setGameState("GAMEOVER");
             setHighScore((h) => Math.max(h, scoreRef.current));
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
-            clearInterval(spawnRef.current);
+            if (spawnRef.current) {
+              clearInterval(spawnRef.current);
+              spawnRef.current = null;
+            }
             return [];
           }
         }
@@ -277,7 +301,10 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
   useEffect(() => {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      clearInterval(spawnRef.current);
+      if (spawnRef.current) {
+        clearInterval(spawnRef.current);
+        spawnRef.current = null;
+      }
     };
   }, []);
 
@@ -757,6 +784,8 @@ export function GameEngine({ title, description, generateProblem, getTierInfo, c
                     </div>
                   </div>
                 </div>
+
+                <GameScoreSaveBadge className="mt-1" />
 
                 {score >= highScore && score > 0 && (
                   <div style={{ color: "#facc15", fontWeight: 900, fontSize: 16, animation: "pulseMultiplier 1s infinite alternate" }}>🏆 NEW HIGH SCORE!</div>

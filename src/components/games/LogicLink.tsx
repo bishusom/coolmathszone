@@ -3,6 +3,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
 import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
+import GameScoreSaveBadge from "@/components/games/GameScoreSaveBadge";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -416,6 +417,7 @@ export default function LogicLink() {
                   <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, letterSpacing: 2, fontWeight: 700, marginBottom: 4 }}>FINAL SCORE</div>
                   <div style={{ color: "white", fontSize: 44, fontWeight: 900 }}>{score.toLocaleString()}</div>
                 </div>
+                <GameScoreSaveBadge className="mt-1" />
                 <button onClick={startGame} style={{ padding: "14px 40px", fontSize: 18, fontWeight: 900, borderRadius: 50, border: "none", background: "linear-gradient(90deg,#22d3ee,#ec4899)", color: "white", cursor: "pointer" }}>
                   Try Again
                 </button>

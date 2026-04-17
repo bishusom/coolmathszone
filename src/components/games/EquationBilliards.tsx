@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
 import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
+import GameScoreSaveBadge from "@/components/games/GameScoreSaveBadge";
 import { useUnlocks } from "@/hooks/useUnlocks";
 
 type GameState = "START" | "PLAYING" | "GAMEOVER";
@@ -790,6 +791,7 @@ export default function EquationBilliards() {
                 <div style={{ color: "rgba(255,255,255,0.8)", marginTop: 16, fontWeight: 700 }}>
                   Reached level {level} and earned {coins} coins.
                 </div>
+                <GameScoreSaveBadge className="mt-1" />
                 <button
                   onClick={startGame}
                   style={{

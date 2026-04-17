@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import UserProfileButton from './UserProfileButton';
 import MobileMenu from './MobileMenu';
+import UserProfileButton from './UserProfileButton';
 
 export default function Header() {
   return (
@@ -66,9 +66,8 @@ export default function Header() {
             <UserProfileButton />
           </div>
 
-          {/* Mobile: Profile + Hamburger */}
-          <div className="flex md:hidden items-center gap-3">
-            <UserProfileButton />
+          {/* Mobile: Hamburger only */}
+          <div className="flex md:hidden items-center">
             <MobileMenu />
           </div>
         </div>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
 import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
+import GameScoreSaveBadge from "@/components/games/GameScoreSaveBadge";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -182,6 +183,8 @@ export default function BinaryBridge() {
                 : "Your code failed to stabilize the bridge. Sequence terminated."}
             </p>
           </div>
+
+          {gameState === "GAMEOVER" && <GameScoreSaveBadge className="mt-1" />}
 
           {/* Advanced Toggles */}
           <div style={{ background: "rgba(0,0,0,0.3)", padding: 20, borderRadius: 24, width: "100%", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 16, border: "1px solid rgba(255,255,255,0.05)" }}>

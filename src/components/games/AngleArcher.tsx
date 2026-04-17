@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
 import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
+import GameScoreSaveBadge from "@/components/games/GameScoreSaveBadge";
 import { useUnlocks } from "@/hooks/useUnlocks";
 import { useCursorAvatar } from "@/hooks/useCursorAvatar";
 import CursorAvatarOverlay from "@/components/games/CursorAvatarOverlay";
@@ -141,7 +142,7 @@ export default function AngleArcher() {
     trackGameOver({ score, coins, difficulty, reason: "miss" });
     updateProgress(coins, Math.floor(score / 100));
     setIsFlying(false);
-    setTimeout(() => resetAttempt(), 2000);
+    setGameState("GAMEOVER");
   };
 
   const mapY = (y: number) => 100 - y;
@@ -173,6 +174,18 @@ export default function AngleArcher() {
             ))}
           </div>
           <button onClick={startGame} style={{ padding: "16px 48px", fontSize: 18, fontWeight: 900, borderRadius: 50, border: "none", background: "linear-gradient(90deg, #34d399, #10b981)", color: "white", cursor: "pointer", letterSpacing: 1 }}>START ARCHERY</button>
+        </div>
+      ) : gameState === "GAMEOVER" ? (
+        <div style={{ height: 420, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 }}>
+          <div style={{ fontSize: 80, animation: "float 3s infinite ease-in-out" }}>💥</div>
+          <h3 style={{ fontSize: 28, fontWeight: 900, color: "#fca5a5", margin: 0 }}>GAME OVER</h3>
+          <p style={{ textAlign: "center", maxWidth: 320, color: "rgba(255,255,255,0.8)", lineHeight: 1.6 }}>
+            Your shot missed the target. Final score {score.toLocaleString()}.
+          </p>
+          <GameScoreSaveBadge className="mt-1" />
+          <button onClick={startGame} style={{ padding: "16px 48px", fontSize: 18, fontWeight: 900, borderRadius: 50, border: "none", background: "linear-gradient(90deg, #34d399, #10b981)", color: "white", cursor: "pointer", letterSpacing: 1 }}>
+            TRY AGAIN
+          </button>
         </div>
       ) : (
         <>

@@ -1,4 +1,5 @@
 // app/worksheets/[grade]/[topic]/page.tsx - NEW SERVER COMPONENT
+import type { Metadata } from 'next';
 import { generateWorksheetProblems } from '@/utils/worksheetGenerator';
 import TopicWorksheetClient from './client-page';
 import { notFound } from 'next/navigation';
@@ -10,6 +11,33 @@ interface PageProps {
   }>;
 }
 
+function formatTopic(topic: string) {
+  return topic
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { grade, topic } = await params;
+  const formattedTopic = formatTopic(topic);
+  const title = `${formattedTopic} Worksheets - Grade ${grade} | CoolMathsZone`;
+  const description = `Generate and download printable ${formattedTopic} worksheets for Grade ${grade}. Perfect for extra practice and offline learning.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `https://coolmathszone.com/worksheets/${grade}/${topic}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://coolmathszone.com/worksheets/${grade}/${topic}`,
+    },
+  };
+}
+
 export default async function TopicWorksheetPage({ params }: PageProps) {
   const { grade, topic } = await params;
   
@@ -18,9 +46,7 @@ export default async function TopicWorksheetPage({ params }: PageProps) {
     const initialWorksheet = await generateWorksheetProblems(grade, topic);
     
     // Format topic for display
-    const formattedTopic = topic.split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    const formattedTopic = formatTopic(topic);
       
     // Get grade display name
     const gradeDisplay = grade === 'kindergarten' ? 'Kindergarten' : 

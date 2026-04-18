@@ -2,10 +2,36 @@ import { getGradeLevel, getTopicsByGrade } from '@/utils/gradeHelpers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
+import type { Metadata } from 'next';
 
 interface PageProps {
   params: {
     grade: string;
+  };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { grade } = await params;
+  const gradeLabel = grade === 'kindergarten'
+    ? 'Kindergarten'
+    : grade.startsWith('grade')
+      ? `Grade ${grade.replace('grade', '')}`
+      : grade.charAt(0).toUpperCase() + grade.slice(1);
+
+  const title = `${gradeLabel} Worksheets | CoolMathsZone`;
+  const description = `Printable worksheets for ${gradeLabel.toLowerCase()} math practice and offline learning.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `https://coolmathszone.com/worksheets/${grade}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://coolmathszone.com/worksheets/${grade}`,
+    },
   };
 }
 

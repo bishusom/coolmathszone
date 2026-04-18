@@ -1,11 +1,49 @@
 // app/grades/[grade]/[topic]/page.tsx
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import GradesFramework from '@/components/framework/GradesFrameWork';
 import { generateFirstExercise, generatePrimaryFirstExercise } from '@/utils/exerciseGenerators/index';
 import { getAllGradeLevels, getGradeLevel, getTopic, isValidGrade, isValidTopic } from '@/utils/gradeHelpers';
 import { checkMoneyTopic } from '@/utils/topichelper';
 import type { ExerciseTemplate } from '@/utils/exerciseGenerators/grades';
+import { createServerSupabaseClient } from '@/lib/supabaseServer';
+import GradesFramework from '@/components/framework/GradesFrameWork';
+
+interface TopicLessonContent {
+  learning_goal: string;
+  prerequisites: string[];
+  core_explanation: string;
+  key_rules: string[];
+  summary: string;
+  common_mistakes: string[];
+  teaching_tips: string[];
+}
+
+async function getTopicLessonData(grade: string, topic: string) {
+  const gradeLevel = getGradeLevel(grade);
+  const topicData = getTopic(grade, topic);
+
+  if (!gradeLevel || !topicData) {
+    return { gradeLevel: undefined, topicData: undefined, concept: null };
+  }
+
+  try {
+    const supabase = createServerSupabaseClient();
+
+    const conceptResult = await supabase
+      .from('math_concept_pages')
+      .select('*')
+      .eq('grade_id', grade)
+      .eq('topic_id', topic)
+      .maybeSingle();
+
+    const concept = conceptResult.data as TopicLessonContent | null;
+
+    return { gradeLevel, topicData, concept };
+  } catch (error) {
+    console.error('Supabase lesson content lookup failed:', error);
+    return { gradeLevel, topicData, concept: null };
+  }
+}
 
 interface PageProps {
   params: Promise<{
@@ -17,9 +55,8 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { grade, topic } = await params;
-  
-  const gradeLevel = getGradeLevel(grade);
-  const topicData = getTopic(grade, topic);
+
+  const { gradeLevel, topicData, concept } = await getTopicLessonData(grade, topic);
 
   if (!gradeLevel || !topicData) {
     return {
@@ -85,7 +122,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${topicData.title} - ${gradeLevel.title} | CoolMathsZone`,
-    description: topicData.description || `Practice ${topicData.title} with interactive exercises for ${gradeLevel.title} students.`,
+    description: concept?.learning_goal || topicData.description || `Practice ${topicData.title} with interactive exercises for ${gradeLevel.title} students.`,
     alternates: {
       canonical: `https://coolmathszone.com/grades/${gradeLevel.id}/${topicData.id}`,
     },
@@ -99,6 +136,7 @@ export default async function TopicPage({ params, searchParams }: PageProps) {
   const { grade, topic } = await params;
   const searchParamsObj = await searchParams;
   const currencyCode = searchParamsObj.currency as string;
+  const { gradeLevel, topicData, concept } = await getTopicLessonData(grade, topic);
 
   // Validate grade and topic using helper
   if (!isValidGrade(grade) || !isValidTopic(grade, topic)) {
@@ -112,7 +150,15 @@ export default async function TopicPage({ params, searchParams }: PageProps) {
       ? await generateFirstExercise(grade, topic, isMoneyTopic ? currencyCode : undefined)
       : await generatePrimaryFirstExercise(grade, topic, isMoneyTopic ? currencyCode : undefined);
     
-    return <GradesFramework grade={grade as any} topic={topic} initialExercise={firstExercise} />;
+    return (
+      <GradesFramework
+        grade={(gradeLevel?.id ?? grade) as any}
+        topic={topic}
+        topicDescription={topicData?.description ?? ''}
+        concept={concept}
+        initialExercise={firstExercise}
+      />
+    );
   } catch (error) {
     console.error('Error generating first exercise:', error);
     const fallbackExercise: ExerciseTemplate = {
@@ -124,7 +170,15 @@ export default async function TopicPage({ params, searchParams }: PageProps) {
       hints: ['Click any option to begin your practice session!'],
       visualAid: '🌟'
     };
-    return <GradesFramework grade={grade as any} topic={topic} initialExercise={fallbackExercise} />;
+    return (
+      <GradesFramework
+        grade={(gradeLevel?.id ?? grade) as any}
+        topic={topic}
+        topicDescription={topicData?.description ?? ''}
+        concept={concept}
+        initialExercise={fallbackExercise}
+      />
+    );
   }
 }
 

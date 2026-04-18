@@ -16,13 +16,25 @@ export function PageContainer({ children, className = '', gradient = 'gradient-o
   );
 }
 
-export function ContentCard({ children, className = '', variant = 'glass' }: { children: React.ReactNode; className?: string; variant?: 'glass' | 'solid' }) {
+export function ContentCard({ children, className = '', variant = 'glass' }: { children: React.ReactNode; className?: string; variant?: 'glass' | 'solid' | 'dark' }) {
   const baseClass = 'rounded-3xl shadow-2xl';
   
   if (variant === 'solid') {
     return (
       <div className={`${baseClass} bg-white border-2 border-gray-200 ${className}`}>
         {children}
+      </div>
+    );
+  }
+
+  if (variant === 'dark') {
+    return (
+      <div className={`${baseClass} relative overflow-hidden bg-gradient-to-br from-slate-950 via-sky-950 to-cyan-950 backdrop-blur-xl border border-cyan-300/15 shadow-[0_24px_80px_rgba(2,6,23,0.55)] ${className}`}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.14),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(45,212,191,0.12),transparent_24%)]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/40 to-transparent" />
+        <div className="relative z-10">
+          {children}
+        </div>
       </div>
     );
   }
@@ -35,9 +47,10 @@ export function ContentCard({ children, className = '', variant = 'glass' }: { c
   );
 }
 
-export function MagicButton({ children, onClick, className = '', gradient = 'gradient-ocean' }: any) {
+export function MagicButton({ children, onClick, className = '', gradient = 'gradient-ocean', type = 'button' }: any) {
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`${gradient} text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ${className}`}
     >

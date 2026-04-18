@@ -43,7 +43,8 @@ export default function TopicWorksheetClient({
   const pdfProblems = worksheet.map(problem => ({
     question: problem.question,
     type: problem.type || topic,
-    difficulty: problem.difficulty || 'medium'
+    difficulty: problem.difficulty || 'medium',
+    visualAid: problem.visualAid
   }));
 
   return (

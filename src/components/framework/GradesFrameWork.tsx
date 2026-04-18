@@ -16,10 +16,22 @@ import { useUnlocks } from '@/hooks/useUnlocks';
 
 type GradeLevelId = typeof gradeLevels[number]['id'];
 
+interface TopicLessonContent {
+  learning_goal: string;
+  prerequisites: string[];
+  core_explanation: string;
+  key_rules: string[];
+  summary: string;
+  common_mistakes: string[];
+  teaching_tips: string[];
+}
+
 interface GradesFrameworkProps {
   grade: GradeLevelId;
   topic: string;
   initialExercise: ExerciseTemplate;
+  concept?: TopicLessonContent | null;
+  topicDescription?: string;
 }
 
 const bggradient = "gradient-arctic-adventure"
@@ -120,12 +132,15 @@ function ExerciseCompletionScreen({
 export default function GradesFramework({ 
   grade, 
   topic, 
-  initialExercise 
+  initialExercise,
+  concept,
+  topicDescription,
 }: GradesFrameworkProps) {
   const [exercises, setExercises] = useState<ExerciseTemplate[]>([initialExercise]);
   const [currentExercise, setCurrentExercise] = useState(0);
   const [score, setScore] = useState(0);
   const [showHint, setShowHint] = useState(false);
+  const [showPractice, setShowPractice] = useState(!concept);
   const [isClient, setIsClient] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [userInput, setUserInput] = useState('');
@@ -139,10 +154,27 @@ export default function GradesFramework({
   const sessionStartTime = useRef<Date>(new Date());
   const exerciseStartTime = useRef<Date>(new Date());
   const sessionHeartbeatInterval = useRef<NodeJS.Timeout | null>(null);
+  const practiceCardRef = useRef<HTMLDivElement | null>(null);
 
   // USE HELPER FUNCTIONS instead of hardcoded objects
   const config = getGradeConfig(grade);
   const topicTitle = getTopicTitle(grade, topic);
+  const conceptGoal = concept?.learning_goal || topicDescription || `Start with the concept notes below, then practice.`;
+
+  const handleStartPractice = () => {
+    setShowPractice(true);
+    setShowHint(false);
+    setShowCompletion(false);
+  };
+
+  const handleBackToConcepts = () => {
+    if (concept) {
+      setShowPractice(false);
+      setShowHint(false);
+      setSelectedAnswer(null);
+      setUserInput('');
+    }
+  };
 
   const isEarlyGrade = ['kindergarten', 'grade1', 'grade2'].includes(grade);
   const exerciseCount = isEarlyGrade ? 5 : 10;
@@ -205,6 +237,17 @@ export default function GradesFramework({
       analytics.trackExerciseStart(grade, topic, exercises[currentExercise].id);
     }
   }, [currentExercise, exercises]);
+
+  useEffect(() => {
+    if (showPractice) {
+      requestAnimationFrame(() => {
+        practiceCardRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
+    }
+  }, [showPractice]);
 
   const handleAnswer = (selectedOption: string) => {
     setSelectedAnswer(selectedOption);
@@ -349,68 +392,185 @@ export default function GradesFramework({
           onCurrencyChange={handleCurrencyChange}
           isMoneyTopic={isMoneyTopic}
         />
-        
-        {/* Progress */}
-        <ContentCard className="p-6 mb-6">
-          <div className="flex items-center justify-between text-white">
-            <div className="text-lg font-bold">
-              {isEarlyGrade ? 'Exercise' : 'Challenge'} {currentExercise + 1} of {exercises.length}
-            </div>
-            <div className="flex-1 mx-6">
-              <div className="w-full bg-white/20 rounded-full h-3">
-                <div 
-                  className={`h-3 rounded-full ${buttonGradient} transition-all duration-500`}
-                  style={{ width: `${((currentExercise + 1) / exercises.length) * 100}%` }}
-                ></div>
+
+        {!showPractice && concept && (
+          <ContentCard className="p-8 mb-6" variant="dark">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-8">
+              <div className="max-w-3xl">
+                <div className="inline-flex items-center gap-3 mb-4 rounded-full border border-cyan-300/20 bg-white/5 px-4 py-2 text-sm font-semibold text-cyan-100">
+                  <span className="text-base">📘</span>
+                  Concept Lesson
+                </div>
+                <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+                  {topicTitle}
+                </h2>
+                <p className="text-white/75 text-lg md:text-xl leading-relaxed">
+                  {conceptGoal}
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row lg:flex-col gap-3 lg:min-w-[220px]">
+                <MagicButton
+                  className="text-base py-3 px-6 w-full"
+                  onClick={handleStartPractice}
+                >
+                  🌊 Start Practice
+                </MagicButton>
+                <Link href={`/grades/${grade}`} className="w-full">
+                  <MagicButton className="text-base py-3 px-6 w-full">
+                    ← Back to {config.title}
+                  </MagicButton>
+                </Link>
               </div>
             </div>
-            <div className="text-lg font-bold">
-              Score: <TextGradient gradient={textGradient}>{score}</TextGradient>
-            </div>
-          </div>
-        </ContentCard>
 
-        {/* Exercise Card or Completion Screen */}
-        {showCompletion ? (
-          <ExerciseCompletionScreen
-            score={{ correct: score, total: exercises.length }}
-            onContinue={handleContinue}
-            onNewTopic={handleNewTopic}
-            onGoHome={handleGoHome}
-            config={config}
-          />
-        ) : (
-          <ExerciseContent 
-            exercise={currentEx} 
-            selectedAnswer={selectedAnswer}
-            userInput={userInput}
-            onInputChange={setUserInput}
-            onInputSubmit={handleInputSubmit}
-            onAnswer={handleAnswer}
-            showHint={showHint}
-            onHintClick={handleHintClick}
-            config={config}
-          />
-        )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-white/90">
+              <section className="space-y-2">
+                <h3 className="text-lg font-semibold text-cyan-200">Learning Goal</h3>
+                <p>{concept.learning_goal}</p>
+              </section>
 
-        {/* Navigation */}
-        {!showCompletion && (
-          <ContentCard className="p-6">
-            <div className="flex justify-center space-x-4">
-              <Link href={`/grades/${grade}`}>
-                <MagicButton>
-                  ← {config.emoji} Back to {config.title}
-                </MagicButton>
-              </Link>
-              <MagicButton
-                onClick={handleContinue}
-                gradient={buttonGradient}
-                disabled={isLoading}
-              >
-                {isLoading ? 'Loading...' : '🔄 New Practice Set'}
-              </MagicButton>
+              <section className="space-y-2">
+                <h3 className="text-lg font-semibold text-cyan-200">Core Explanation</h3>
+                <p>{concept.core_explanation}</p>
+              </section>
+
+              {concept.prerequisites.length > 0 && (
+                <section className="space-y-2">
+                  <h3 className="text-lg font-semibold text-cyan-200">Prerequisites</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {concept.prerequisites.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                </section>
+              )}
+
+              {concept.key_rules.length > 0 && (
+                <section className="space-y-2">
+                  <h3 className="text-lg font-semibold text-cyan-200">Key Rules</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {concept.key_rules.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                </section>
+              )}
+
+              {concept.common_mistakes.length > 0 && (
+                <section className="space-y-2">
+                  <h3 className="text-lg font-semibold text-cyan-200">Common Mistakes</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {concept.common_mistakes.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                </section>
+              )}
+
+              {concept.teaching_tips.length > 0 && (
+                <section className="space-y-2">
+                  <h3 className="text-lg font-semibold text-cyan-200">Teaching Tips</h3>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {concept.teaching_tips.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                </section>
+              )}
+
+              <section className="space-y-2 lg:col-span-2">
+                <h3 className="text-lg font-semibold text-cyan-200">Summary</h3>
+                <p>{concept.summary}</p>
+              </section>
             </div>
           </ContentCard>
+        )}
+
+        {showPractice && (
+          <>
+            <div ref={practiceCardRef}>
+              <ContentCard className="p-8 mb-6" variant="dark">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="inline-flex items-center gap-3 mb-3 rounded-full border border-cyan-300/20 bg-white/5 px-4 py-2 text-sm font-semibold text-cyan-100">
+                      <span className="text-base">🌊</span>
+                      Practice Mode
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-black text-white">
+                      {topicTitle}
+                    </h2>
+                  </div>
+                  <MagicButton className="text-base py-3 px-6" onClick={handleBackToConcepts}>
+                    ← Back to Concepts
+                  </MagicButton>
+                </div>
+              </ContentCard>
+            </div>
+
+            {/* Progress */}
+            <ContentCard className="p-6 mb-6">
+              <div className="flex items-center justify-between text-white">
+                <div className="text-lg font-bold">
+                  {isEarlyGrade ? 'Exercise' : 'Challenge'} {currentExercise + 1} of {exercises.length}
+                </div>
+                <div className="flex-1 mx-6">
+                  <div className="w-full bg-white/20 rounded-full h-3">
+                    <div 
+                      className={`h-3 rounded-full ${buttonGradient} transition-all duration-500`}
+                      style={{ width: `${((currentExercise + 1) / exercises.length) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="text-lg font-bold">
+                  Score: <TextGradient gradient={textGradient}>{score}</TextGradient>
+                </div>
+              </div>
+            </ContentCard>
+
+            {/* Exercise Card or Completion Screen */}
+            <div id="practice-problems">
+              {showCompletion ? (
+                <ExerciseCompletionScreen
+                  score={{ correct: score, total: exercises.length }}
+                  onContinue={handleContinue}
+                  onNewTopic={handleNewTopic}
+                  onGoHome={handleGoHome}
+                  config={config}
+                />
+              ) : (
+                <ExerciseContent 
+                  exercise={currentEx} 
+                  selectedAnswer={selectedAnswer}
+                  userInput={userInput}
+                  onInputChange={setUserInput}
+                  onInputSubmit={handleInputSubmit}
+                  onAnswer={handleAnswer}
+                  showHint={showHint}
+                  onHintClick={handleHintClick}
+                  config={config}
+                />
+              )}
+            </div>
+
+            {/* Navigation */}
+            {!showCompletion && (
+              <ContentCard className="p-6">
+                <div className="flex justify-center space-x-4">
+                  {concept ? (
+                    <MagicButton onClick={handleBackToConcepts}>
+                      ← Back to Concepts
+                    </MagicButton>
+                  ) : (
+                    <Link href={`/grades/${grade}`}>
+                      <MagicButton>
+                        ← {config.emoji} Back to {config.title}
+                      </MagicButton>
+                    </Link>
+                  )}
+                  <MagicButton
+                    onClick={handleContinue}
+                    gradient={buttonGradient}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Loading...' : '🔄 New Practice Set'}
+                  </MagicButton>
+                </div>
+              </ContentCard>
+            )}
+          </>
         )}
       </div>
     </PageContainer>

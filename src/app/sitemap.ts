@@ -126,7 +126,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const gameSlugs = [
     'math-popper', 'algebra-dash', 'fraction-slicer', 'logic-link',
     'prime-protector', 'slope-slider', 'angle-archer', 'binary-bridge',
-    'root-reaper', 'operator-overload'
+    'root-reaper', 'operator-overload', 'function-tiles', 'number-arranger',
+    'equation-billiards', 'number-scramble'
   ]
   const gameRoutes = gameSlugs.map((slug): MetadataRoute.Sitemap[0] => ({
     url: `${baseUrl}/games/${slug}`,

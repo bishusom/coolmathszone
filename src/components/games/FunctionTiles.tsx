@@ -11,14 +11,15 @@ type GamePhase = "start" | "playing" | "gameover";
 
 type TileCard = {
   id: string;
-  pairId: string;
-  kind: "function" | "pair";
-  text: string;
+  value: number;
+  type: "input" | "output";
+  matched: boolean;
 };
 
 type RoundState = {
   cards: TileCard[];
   pairCount: number;
+  targetFunction: FunctionSpec;
 };
 
 type FunctionSpec = {
@@ -34,60 +35,63 @@ function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function createFunctionSpec(difficulty: Difficulty, level: number, index: number): FunctionSpec {
+function createFunctionSpec(difficulty: Difficulty, level: number): FunctionSpec {
   const easySpecs: FunctionSpec[] = [
     { label: "f(x) = x + 1", evaluate: (x) => x + 1 },
-    { label: "g(x) = x + 2", evaluate: (x) => x + 2 },
-    { label: "h(x) = x - 1", evaluate: (x) => x - 1 },
-    { label: "p(x) = 2x", evaluate: (x) => x * 2 },
+    { label: "f(x) = x + 2", evaluate: (x) => x + 2 },
+    { label: "f(x) = x + 5", evaluate: (x) => x + 5 },
+    { label: "f(x) = x - 1", evaluate: (x) => x - 1 },
+    { label: "f(x) = 2x", evaluate: (x) => x * 2 },
+    { label: "f(x) = 10x", evaluate: (x) => x * 10 },
   ];
 
   const mediumSpecs: FunctionSpec[] = [
     { label: "f(x) = 2x + 1", evaluate: (x) => 2 * x + 1 },
-    { label: "g(x) = 3x - 2", evaluate: (x) => 3 * x - 2 },
-    { label: "h(x) = x^2 + 1", evaluate: (x) => x * x + 1 },
-    { label: "p(x) = 2(x + 3)", evaluate: (x) => 2 * (x + 3) },
+    { label: "f(x) = 3x - 2", evaluate: (x) => 3 * x - 2 },
+    { label: "f(x) = x^2", evaluate: (x) => x * x },
+    { label: "f(x) = 100 - x", evaluate: (x) => 100 - x },
+    { label: "f(x) = x / 2", evaluate: (x) => x / 2 },
+    { label: "f(x) = 2(x + 3)", evaluate: (x) => 2 * (x + 3) },
   ];
 
   const hardSpecs: FunctionSpec[] = [
-    { label: "f(x) = 2x^2 - x + 1", evaluate: (x) => 2 * x * x - x + 1 },
-    { label: "g(x) = 3(x + 2) - 1", evaluate: (x) => 3 * (x + 2) - 1 },
-    { label: "h(x) = x^2 + 2x + 3", evaluate: (x) => x * x + 2 * x + 3 },
-    { label: "p(x) = (x + 1)(x + 2)", evaluate: (x) => (x + 1) * (x + 2) },
+    { label: "f(x) = x^2 + x", evaluate: (x) => x * x + x },
+    { label: "f(x) = 2x^2 + 1", evaluate: (x) => 2 * x * x + 1 },
+    { label: "f(x) = 3(x + 2) - 1", evaluate: (x) => 3 * (x + 2) - 1 },
+    { label: "f(x) = (x + 1)(x - 1)", evaluate: (x) => (x + 1) * (x - 1) },
+    { label: "f(x) = 5x - 25", evaluate: (x) => 5 * x - 25 },
+    { label: "f(x) = x^2 - 10", evaluate: (x) => x * x - 10 },
   ];
 
   const pool = difficulty === "easy" ? easySpecs : difficulty === "medium" ? mediumSpecs : hardSpecs;
-  const offset = (level + index) % pool.length;
-  return pool[offset];
+  return pool[randomInt(0, pool.length - 1)];
 }
 
 function buildRound(difficulty: Difficulty, level: number): RoundState {
   const basePairs = difficulty === "easy" ? 4 : difficulty === "medium" ? 6 : 8;
-  const pairCount = Math.min(basePairs + Math.floor(level / 2), 8);
+  const pairCount = Math.min(basePairs + Math.floor(level / 3), 12);
+  const targetFunction = createFunctionSpec(difficulty, level);
 
-  const pairs = Array.from({ length: pairCount }, (_, i) => {
-    const spec = createFunctionSpec(difficulty, level, i);
-    const input = difficulty === "easy"
-      ? randomInt(1, 8 + level)
-      : difficulty === "medium"
-        ? randomInt(2, 10 + level)
-        : randomInt(2, 12 + level);
-    const output = spec.evaluate(input);
-    return {
-      pairId: `pair-${level}-${i}`,
-      functionText: spec.label,
-      answerText: `${input} → ${output}`,
-    };
-  });
+  const entries: { input: number; output: number }[] = [];
+  const usedInputs = new Set<number>();
+
+  while (entries.length < pairCount) {
+    const input = difficulty === "easy" ? randomInt(1, 10) : difficulty === "medium" ? randomInt(2, 15) : randomInt(3, 20);
+    if (!usedInputs.has(input)) {
+        const output = targetFunction.evaluate(input);
+        entries.push({ input, output });
+        usedInputs.add(input);
+    }
+  }
 
   const cards: TileCard[] = shuffle(
-    pairs.flatMap((pair): TileCard[] => [
-      { id: `${pair.pairId}-function`, pairId: pair.pairId, kind: "function", text: pair.functionText },
-      { id: `${pair.pairId}-pair`, pairId: pair.pairId, kind: "pair", text: pair.answerText },
+    entries.flatMap((entry, i): TileCard[] => [
+      { id: `in-${i}`, value: entry.input, type: "input", matched: false },
+      { id: `out-${i}`, value: entry.output, type: "output", matched: false },
     ])
   );
 
-  return { cards, pairCount };
+  return { cards, pairCount, targetFunction };
 }
 
 export default function FunctionTiles() {
@@ -157,7 +161,12 @@ export default function FunctionTiles() {
     const [firstId, secondId] = nextRevealed;
     const firstCard = round.cards.find((card) => card.id === firstId);
     const secondCard = round.cards.find((card) => card.id === secondId);
-    const matched = firstCard?.pairId === secondCard?.pairId;
+    
+    // Logic: One must be input, one must be output, and they must satisfy the function
+    const inputCard = firstCard?.type === "input" ? firstCard : secondCard?.type === "input" ? secondCard : null;
+    const outputCard = firstCard?.type === "output" ? firstCard : secondCard?.type === "output" ? secondCard : null;
+    
+    const matched = inputCard && outputCard && round.targetFunction.evaluate(inputCard.value) === outputCard.value;
 
     window.setTimeout(() => {
       if (matched) {
@@ -176,6 +185,7 @@ export default function FunctionTiles() {
 
         window.setTimeout(() => {
           setFlash(null);
+          setRevealedIds([]);
           setLocked(false);
           if (nextMatched.length >= round.cards.length) {
             nextRound();
@@ -201,10 +211,10 @@ export default function FunctionTiles() {
 
   const boardTitle = useMemo(() => {
     return difficulty === "easy"
-      ? "Match simple function rules to input-output pairs"
+      ? "Match the input value to the correct result using the rule below"
       : difficulty === "medium"
-        ? "Functions get bigger, outputs get trickier"
-        : "Hard mode: polynomial and bracket functions";
+        ? "Calculate the outputs as the rules get more complex"
+        : "Expert level: polynomials and squared functions";
   }, [difficulty]);
 
   const progress = round.cards.length === 0 ? 0 : Math.round((matchedIds.length / round.cards.length) * 100);
@@ -230,10 +240,11 @@ export default function FunctionTiles() {
           {(["easy", "medium", "hard"] as Difficulty[]).map((option) => (
             <button
               key={option}
-              onClick={() => phase === "start" && setDifficulty(option)}
-              className={`rounded-2xl px-4 py-3 text-sm font-black uppercase tracking-[0.2em] transition-colors ${
+              disabled={phase === "playing"}
+              onClick={() => setDifficulty(option)}
+              className={`rounded-2xl px-4 py-3 text-sm font-black uppercase tracking-[0.2em] transition-all ${
                 difficulty === option ? "bg-cyan-500 text-white shadow-lg" : "bg-white/5 text-white/70 hover:bg-white/10"
-              }`}
+              } ${phase === "playing" ? "cursor-not-allowed opacity-50" : ""}`}
             >
               {option}
             </button>
@@ -267,34 +278,58 @@ export default function FunctionTiles() {
           </div>
         ) : (
           <>
+            <div className="mb-6 flex justify-center">
+              <div className="group relative overflow-hidden rounded-3xl border-2 border-cyan-400/50 bg-gradient-to-br from-indigo-900/80 to-blue-900/80 px-10 py-6 shadow-[0_0_30px_rgba(34,211,238,0.2)]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.1),transparent)]"></div>
+                <div className="text-center">
+                  <span className="text-xs font-black uppercase tracking-[0.4em] text-cyan-400/70">Current Rule</span>
+                  <div className="mt-1 text-4xl font-black text-white md:text-5xl">{round.targetFunction.label}</div>
+                </div>
+              </div>
+            </div>
+
             <div className="mb-4 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-xs font-black uppercase tracking-[0.25em] text-slate-200">
               <span>Round {level + 1}</span>
               <span>{progress}% matched</span>
               <span>{round.pairCount} pairs</span>
             </div>
 
-            <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
               {round.cards.map((card) => {
-                const isOpen = revealedIds.includes(card.id) || matchedIds.includes(card.id);
+                const isSelected = revealedIds.includes(card.id);
                 const isMatched = matchedIds.includes(card.id);
-                const cardBg = card.kind === "function" ? "from-cyan-500 to-blue-600" : "from-amber-500 to-orange-600";
+                
+                // Vibrant Middle School Colors: Input = Neon Blue/Cyan, Output = Neon Orange/Hot Pink
+                const cardTheme = card.type === "input" 
+                    ? "border-cyan-400/50 bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-[0_4px_15px_rgba(6,182,212,0.3)]" 
+                    : "border-rose-400/50 bg-gradient-to-br from-orange-500 to-rose-500 text-white shadow-[0_4px_15px_rgba(244,63,94,0.3)]";
+                
+                const activeTheme = card.type === "input"
+                    ? "border-white bg-gradient-to-br from-cyan-400 to-blue-400 text-white scale-105 shadow-[0_0_25px_rgba(34,211,238,0.6)] ring-2 ring-white/50"
+                    : "border-white bg-gradient-to-br from-rose-400 to-orange-400 text-white scale-105 shadow-[0_0_25px_rgba(251,113,133,0.6)] ring-2 ring-white/50";
 
                 return (
                   <button
                     key={card.id}
                     onClick={() => revealTile(card.id)}
                     disabled={locked || isMatched}
-                    className={`group min-h-[132px] rounded-[1.5rem] border p-3 text-left shadow-lg transition-all duration-300 ${
-                      isOpen ? `border-white/20 bg-gradient-to-br ${cardBg}` : "border-white/10 bg-white/5 hover:-translate-y-1 hover:bg-white/10"
-                    } ${isMatched ? "ring-2 ring-emerald-400/70" : ""}`}
+                    className={`group relative flex min-h-[110px] flex-col items-center justify-center rounded-[2rem] border-2 p-4 text-center transition-all duration-500 ${
+                      isMatched ? "scale-0 opacity-0 pointer-events-none" :
+                      isSelected ? activeTheme : 
+                      `${cardTheme} hover:-translate-y-1 hover:brightness-110 active:scale-95`
+                    }`}
                   >
-                    <div className="mb-3 flex items-center justify-between text-[10px] font-black uppercase tracking-[0.2em] text-white/70">
-                      <span>{card.kind === "function" ? "Function" : "Pair"}</span>
-                      <span>{isMatched ? "Matched" : isOpen ? "Open" : "Tile"}</span>
-                    </div>
-                    <div className="flex min-h-[72px] items-center justify-center rounded-2xl border border-white/15 bg-black/20 px-3 text-center text-lg font-black leading-tight text-white transition-transform group-hover:scale-[1.01]">
-                      {isOpen ? card.text : "?"}
-                    </div>
+                    {!isMatched && (
+                        <>
+                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[2rem]"></div>
+                            <div className="flex flex-col items-center gap-1 relative z-10">
+                                <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? "text-white" : "text-white/80"}`}>
+                                    {card.type}
+                                </span>
+                                <span className="text-3xl font-black drop-shadow-md md:text-4xl">{card.value}</span>
+                            </div>
+                        </>
+                    )}
                   </button>
                 );
               })}

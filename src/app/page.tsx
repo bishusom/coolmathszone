@@ -45,8 +45,8 @@ export default function Home() {
 
   return (
     <Layout>
-      {/* Sunlit Ocean Hero Section */}
-      <section className="relative py-6 bg-gradient-to-b from-cyan-100 to-blue-200 text-teal-900 overflow-hidden">
+      {/* Deepened Sunlit Ocean Hero Section */}
+      <section className="relative py-6 bg-gradient-to-b from-cyan-300 to-blue-400 text-teal-950 overflow-hidden">
         {/* Sunrays */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute -top-32 left-1/4 w-32 h-[150%] bg-white/20 animate-sunray blur-2xl origin-top"></div>
@@ -66,11 +66,14 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none">
           <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-blue-300/40 to-transparent"></div>
           <div className="flex justify-center space-x-8 absolute -bottom-4 left-0 right-0">
-            {['🐠', '🐚', '🦀', '🐢', '🫧'].map((emoji, i) => (
+            {['🐠', '🐚', '🐬', '🦀', '🐳', '🐙', '🐡', '🦑'].map((emoji, i) => (
               <div
                 key={i}
-                className="text-xl animate-float opacity-80"
-                style={{ animationDelay: `${i * 0.5}s` }}
+                className="animate-float-sea opacity-70"
+                style={{
+                  animationDelay: `${i * 1.2}s`,
+                  fontSize: `${1.2 + (i % 4) * 0.4}rem`
+                }}
               >
                 {emoji}
               </div>
@@ -101,14 +104,14 @@ export default function Home() {
       </section>
 
       {/* Ad after Hero Section */}
-      <section className="py-4 bg-gradient-to-r from-blue-300 to-cyan-200">
+      <section className="py-4 bg-gradient-to-r from-blue-400 to-cyan-300">
         <div className="container mx-auto px-4">
           <ResponsiveAd position="hero" />
         </div>
       </section>
 
       {/* The Coral Bento Hub */}
-      <section className="py-12 bg-gradient-to-b from-blue-200 via-cyan-100 to-blue-50 relative overflow-hidden">
+      <section className="py-12 bg-gradient-to-b from-blue-400 via-cyan-200 to-blue-100 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none opacity-50">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-32 -translate-y-32"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-32 translate-y-32"></div>
@@ -128,7 +131,7 @@ export default function Home() {
                 </div>
 
                 {/* Game 1 */}
-                <div className="flex-1 relative group overflow-hidden rounded-[2.5rem] border-2 border-white/60 shadow-xl bg-white/40 backdrop-blur-md text-blue-900 p-6 hover:bg-white/50 transition-colors">
+                <div className="flex-1 relative group overflow-hidden rounded-[2.5rem] border-2 border-white/70 shadow-xl bg-white/50 backdrop-blur-md text-blue-950 p-6 hover:bg-white/60 transition-colors">
                   <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-300/30 rounded-full blur-3xl -translate-y-16 translate-x-16 transition-transform group-hover:scale-110"></div>
                   <div className="relative z-10 h-full flex items-center gap-6">
                     <div className="text-5xl transform transition-transform group-hover:scale-110 group-hover:rotate-12 duration-500 select-none shrink-0">
@@ -147,7 +150,7 @@ export default function Home() {
                 </div>
 
                 {/* Game 2 */}
-                <div className="flex-1 relative group overflow-hidden rounded-[2.5rem] border-2 border-white/60 shadow-xl bg-white/40 backdrop-blur-md text-purple-900 p-6 hover:bg-white/50 transition-colors">
+                <div className="flex-1 relative group overflow-hidden rounded-[2.5rem] border-2 border-white/70 shadow-xl bg-white/50 backdrop-blur-md text-purple-950 p-6 hover:bg-white/60 transition-colors">
                   <div className="absolute top-0 right-0 w-48 h-48 bg-fuchsia-300/30 rounded-full blur-3xl -translate-y-16 translate-x-16 transition-transform group-hover:scale-110"></div>
                   <div className="relative z-10 h-full flex items-center gap-6">
                     <div className="text-5xl transform transition-transform group-hover:scale-110 group-hover:rotate-12 duration-500 select-none shrink-0">
@@ -167,7 +170,7 @@ export default function Home() {
               </div>
 
               {/* Grade Navigator (Wide) */}
-              <div className="lg:col-span-2 lg:row-span-1 rounded-[2.5rem] border-2 border-white/60 bg-white/60 backdrop-blur-md p-8 shadow-xl">
+              <div className="lg:col-span-2 lg:row-span-1 rounded-[2.5rem] border-2 border-white/70 bg-white/70 backdrop-blur-md p-8 shadow-xl">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-black text-teal-900">Explore Grades</h3>
                   <Link href="/grades" className="text-sm font-bold text-cyan-600 hover:text-cyan-700 underline underline-offset-4">
@@ -195,7 +198,7 @@ export default function Home() {
               </div>
 
               {/* Daily Surprise (Medium) */}
-              <div className="lg:col-span-1 lg:row-span-1 rounded-[2.5rem] overflow-hidden shadow-xl border-2 border-white/60 bg-white/40 backdrop-blur-md">
+              <div className="lg:col-span-1 lg:row-span-1 rounded-[2.5rem] overflow-hidden shadow-xl border-2 border-white/70 bg-white/50 backdrop-blur-md">
                 <DailyMathSurprise isCompact={true} />
               </div>
 
@@ -206,7 +209,7 @@ export default function Home() {
                 <ul className="space-y-4 relative z-10">
                   <li className="flex items-center gap-3">
                     <span className="text-xl">📊</span>
-                    <span className="text-sm font-bold">13+ Math Games</span>
+                    <span className="text-sm font-bold">14+ Math Games</span>
                   </li>
                   <li className="flex items-center gap-3">
                     <span className="text-xl">🧠</span>
@@ -225,7 +228,7 @@ export default function Home() {
       </section>
 
       {/* Simplified Features Row */}
-      <section className="py-10 bg-blue-50 relative overflow-hidden">
+      <section className="py-10 bg-blue-100 relative overflow-hidden">
         <div className="absolute top-0 left-1/4 w-32 h-32 bg-cyan-200 rounded-full blur-3xl opacity-40"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-6xl mx-auto flex flex-wrap justify-center gap-6">
@@ -246,7 +249,7 @@ export default function Home() {
       </section>
 
       {/* Final Ad Section */}
-      <section className="py-8 bg-gradient-to-r from-cyan-200 to-blue-300">
+      <section className="py-8 bg-gradient-to-r from-cyan-300 to-blue-400">
         <div className="container mx-auto px-4">
           <ResponsiveAd position="footer" />
         </div>

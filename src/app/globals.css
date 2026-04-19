@@ -415,3 +415,23 @@ body {
   background: linear-gradient(135deg, #f8d7da, #f5c6cb);
   border-color: #dc3545;
 }
+
+/* Light Ocean Theme Animations */
+@keyframes sunray {
+  0%, 100% { opacity: 0.3; transform: rotate(15deg) scale(1); }
+  50% { opacity: 0.6; transform: rotate(17deg) scale(1.05); }
+}
+
+@keyframes bubble-rise {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+}
+
+.animate-sunray {
+  animation: sunray 8s ease-in-out infinite;
+}
+
+.animate-bubble {
+  animation: bubble-rise 4s ease-in infinite;
+}

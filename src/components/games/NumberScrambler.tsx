@@ -49,6 +49,7 @@ function buildBubbleLayout(total: number, level: number) {
   const cellHeight = 100 / rows;
   const speedTier = Math.floor(level / 3);
   const speedMultiplier = 1 + speedTier * 0.18;
+  const wobbleMultiplier = 1 + speedTier * 0.12;
   return shuffle(Array.from({ length: rows * columns }, (_, i) => i))
     .slice(0, total)
     .map((cell) => {
@@ -58,9 +59,9 @@ function buildBubbleLayout(total: number, level: number) {
       return {
         left: clamp((col + 0.5) * cellWidth + randomInt(-8, 8), 10, 90),
         top: clamp((row + 0.5) * cellHeight + randomInt(-8, 8), 10, 88),
-        size: randomInt(68, 98),
-        driftX: randomInt(-18, 18),
-        driftY: randomInt(-14, 14),
+        size: randomInt(Math.max(62, 68 - speedTier * 2), Math.max(82, 98 - speedTier * 3)),
+        driftX: Math.round(randomInt(-18, 18) * wobbleMultiplier),
+        driftY: Math.round(randomInt(-14, 14) * wobbleMultiplier),
         duration: Number((randomInt(5, 9) / speedMultiplier).toFixed(2)),
         delay: Number((Math.random() * -6).toFixed(2)),
       };
@@ -131,7 +132,8 @@ function buildRound(difficulty: Difficulty, level: number): RoundState {
   const existingNumberValues = new Set(
     tokens.filter(token => token.kind === "number").map(token => token.text)
   );
-  const extraChoices = tokenCount === 3 ? 6 : tokenCount === 5 ? 5 : 4;
+  const speedTier = Math.floor(level / 3);
+  const extraChoices = (tokenCount === 3 ? 6 : tokenCount === 5 ? 5 : 4) + Math.min(speedTier, 3);
   const bubbleLayout = buildBubbleLayout(tokenCount + extraChoices, level);
   const choices: BubbleChoice[] = tokens.map((token, index) => ({
     ...token,

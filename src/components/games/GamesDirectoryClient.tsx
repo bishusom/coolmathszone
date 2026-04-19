@@ -17,6 +17,48 @@ const difficultyConfig = [
   { key: 'Advanced', label: 'Advanced', description: 'Faster algebra, graph-based thinking, and more demanding problem solving.' },
 ] as const
 
+const difficultyThemes = {
+  Beginner: {
+    shell: 'border-cyan-200/15 bg-gradient-to-br from-cyan-950/35 via-slate-950/25 to-blue-950/35',
+    headerPill: 'border-cyan-200/15 bg-cyan-400/10 text-cyan-50',
+    headerLabel: 'text-cyan-100/80',
+    title: 'text-cyan-50',
+    description: 'text-cyan-50/72',
+    count: 'border-cyan-200/15 bg-cyan-400/10 text-cyan-50',
+    cardGlow: 'bg-gradient-to-br from-cyan-300/20 via-blue-300/10 to-transparent',
+    cardHover: 'hover:border-cyan-300/25 hover:shadow-cyan-500/15',
+    banner: 'Bubble Lab',
+    bannerEmoji: '🫧',
+    sectionTag: 'Warm-up Zone'
+  },
+  Intermediate: {
+    shell: 'border-violet-200/15 bg-gradient-to-br from-violet-950/35 via-slate-950/25 to-indigo-950/35',
+    headerPill: 'border-violet-200/15 bg-violet-400/10 text-violet-50',
+    headerLabel: 'text-violet-100/80',
+    title: 'text-violet-50',
+    description: 'text-violet-50/72',
+    count: 'border-violet-200/15 bg-violet-400/10 text-violet-50',
+    cardGlow: 'bg-gradient-to-br from-violet-300/20 via-cyan-300/10 to-transparent',
+    cardHover: 'hover:border-violet-300/25 hover:shadow-violet-500/15',
+    banner: 'Logic Circuit',
+    bannerEmoji: '⚡',
+    sectionTag: 'Puzzle Lab'
+  },
+  Advanced: {
+    shell: 'border-amber-200/15 bg-gradient-to-br from-amber-950/35 via-slate-950/25 to-rose-950/35',
+    headerPill: 'border-amber-200/15 bg-amber-400/10 text-amber-50',
+    headerLabel: 'text-amber-100/80',
+    title: 'text-amber-50',
+    description: 'text-amber-50/72',
+    count: 'border-amber-200/15 bg-amber-400/10 text-amber-50',
+    cardGlow: 'bg-gradient-to-br from-amber-300/20 via-rose-300/10 to-transparent',
+    cardHover: 'hover:border-amber-300/25 hover:shadow-amber-500/15',
+    banner: 'Challenge Vault',
+    bannerEmoji: '🏆',
+    sectionTag: 'Boss Mode'
+  },
+} as const
+
 const difficultyRank: Record<string, number> = {
   Beginner: 0,
   Intermediate: 1,
@@ -136,55 +178,83 @@ export default function GamesDirectoryClient() {
 
         <div className="flex flex-col gap-10">
           {sortedGroups.map((group) => (
-            <section key={group.key}>
-              <div className="mb-5 flex flex-col gap-2">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-2xl font-black text-white md:text-3xl">
-                    {group.label}
-                  </h2>
-                  <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-100">
-                    {group.games.length} games
-                  </span>
+            <section
+              key={group.key}
+              className={`relative overflow-hidden rounded-[2.25rem] border p-5 shadow-[0_20px_70px_rgba(2,8,23,0.18)] backdrop-blur-xl md:p-6 ${difficultyThemes[group.key].shell}`}
+            >
+              <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r ${group.key === 'Beginner' ? 'from-cyan-300/10 via-cyan-200/70 to-cyan-300/10' : group.key === 'Intermediate' ? 'from-violet-300/10 via-violet-200/70 to-violet-300/10' : 'from-amber-300/10 via-amber-200/70 to-amber-300/10'}`} />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.14),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_28%)] opacity-60" />
+
+              <div className="relative mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                <div className="max-w-2xl">
+                  <div className={`mb-3 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-black uppercase tracking-[0.24em] backdrop-blur-md ${difficultyThemes[group.key].headerPill}`}>
+                    <span className="text-base leading-none">{difficultyThemes[group.key].bannerEmoji}</span>
+                    <span>{difficultyThemes[group.key].banner}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <h2 className={`text-2xl font-black md:text-3xl ${difficultyThemes[group.key].title}`}>
+                      {group.label}
+                    </h2>
+                    <span className={`rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] ${difficultyThemes[group.key].count}`}>
+                      {group.games.length} games
+                    </span>
+                  </div>
+                  <p className={`mt-2 max-w-2xl text-sm leading-relaxed md:text-base ${difficultyThemes[group.key].description}`}>
+                    {group.description}
+                  </p>
                 </div>
-                <p className="max-w-2xl text-sm leading-relaxed text-slate-200 md:text-base">
-                  {group.description}
-                </p>
+
+                <div className={`inline-flex w-fit items-center gap-2 rounded-2xl border px-4 py-3 text-[11px] font-bold uppercase tracking-[0.22em] backdrop-blur-md ${difficultyThemes[group.key].headerPill}`}>
+                  <span className="text-base">✦</span>
+                  {difficultyThemes[group.key].sectionTag}
+                </div>
               </div>
 
               <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                 {group.games.map((game) => (
                   <div
                     key={game.slug}
-                    className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/40 p-5 backdrop-blur-xl transition-all duration-500 hover:border-white/20 hover:shadow-2xl hover:shadow-indigo-500/10 md:p-6"
+                    className={`group relative flex min-h-[340px] flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/45 p-5 shadow-[0_18px_60px_rgba(2,8,23,0.28)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 md:p-6 ${difficultyThemes[group.key].cardHover}`}
                   >
-                    <div className={`absolute -right-20 -top-20 h-36 w-36 bg-gradient-to-br ${game.color} opacity-10 blur-3xl transition-opacity duration-500 group-hover:opacity-20 md:h-40 md:w-40`} />
-                    <div className={`absolute left-0 top-0 h-1 w-full bg-gradient-to-r ${game.color} opacity-50`} />
+                    <div className={`absolute inset-0 ${difficultyThemes[group.key].cardGlow} opacity-[0.28] transition-opacity duration-500 group-hover:opacity-[0.45]`} />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-[0.07] transition-opacity duration-500 group-hover:opacity-[0.12]`} />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.14),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_30%)] opacity-70" />
+                    <div className={`absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br ${game.color} opacity-10 blur-3xl transition-transform duration-500 group-hover:scale-110 md:h-44 md:w-44`} />
+                    <div className={`absolute left-0 top-0 h-1 w-full bg-gradient-to-r ${game.color} opacity-70`} />
 
-                    <div className="mb-4 flex items-start justify-between">
-                      <div className={`flex h-12 w-12 transform items-center justify-center rounded-2xl bg-gradient-to-br ${game.color} text-2xl text-white shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 md:h-14 md:w-14 md:text-3xl`}>
-                        {game.icon}
-                      </div>
-                      <div className="flex flex-col items-end gap-1.5">
-                        <div className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-cyan-100 backdrop-blur-md">
-                          {game.difficulty}
+                    <div className="relative mb-4 flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.1rem] bg-gradient-to-br ${game.color} text-3xl text-white shadow-[0_12px_30px_rgba(15,23,42,0.35)] ring-1 ring-white/20 transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3`}>
+                          {game.icon}
                         </div>
-                        <div className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-indigo-200 backdrop-blur-md">
-                          {game.grade}
+                        <div className="space-y-1">
+                          <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-cyan-100/90 backdrop-blur-md">
+                            {game.grade}
+                          </div>
+                          <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-white/65 backdrop-blur-md">
+                            {game.difficulty}
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <h3 className="mb-2 text-2xl font-black text-white transition-colors group-hover:text-indigo-200">{game.title}</h3>
-                    <p className="mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-cyan-200 md:text-xs">{game.skill}</p>
-                    <p className="mb-5 min-h-[56px] text-sm leading-relaxed text-white/70 md:text-[15px]">
+                    <h3 className="mb-2 text-2xl font-black tracking-tight text-white transition-colors group-hover:text-cyan-100">{game.title}</h3>
+                    <p className="mb-2 text-[11px] font-black uppercase tracking-[0.2em] text-cyan-200/90 md:text-xs">{game.skill}</p>
+                    <p className="mb-5 min-h-[56px] text-sm leading-relaxed text-white/72 md:text-[15px]">
                       {game.description}
                     </p>
 
-                    <Link href={`/games/${game.slug}`}>
-                      <button className={`w-full rounded-2xl py-3 text-base font-bold text-white shadow-lg transition-all duration-300 active:scale-95 ${game.buttonColor}`}>
-                        Play Game →
-                      </button>
-                    </Link>
+                    <div className="mt-auto">
+                      <Link
+                        href={`/games/${game.slug}`}
+                        className={`relative inline-flex w-full items-center justify-center overflow-hidden rounded-2xl px-5 py-3.5 text-base font-bold text-white shadow-lg transition-all duration-300 active:scale-95 ${game.buttonColor}`}
+                      >
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          Play Game
+                          <span className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
+                        </span>
+                      </Link>
+                    </div>
                   </div>
                 ))}
               </div>

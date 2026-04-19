@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
 import { useMeaningfulSuccessPrompt } from "@/components/auth/GameAuthGuard";
 import { useGameRunAnalytics } from "@/components/games/GameAnalyticsContext";
-import GameScoreSaveBadge from "@/components/games/GameScoreSaveBadge";
 
 type Difficulty = "easy" | "medium" | "hard";
 type GamePhase = "start" | "playing" | "gameover";
@@ -15,9 +13,20 @@ type Token = {
   kind: "number" | "operator";
 };
 
+type BubbleChoice = Token & {
+  left: number;
+  top: number;
+  size: number;
+  driftX: number;
+  driftY: number;
+  duration: number;
+  delay: number;
+};
+
 type RoundState = {
   target: number;
   tokens: Token[];
+  choices: BubbleChoice[];
   solution: string;
 };
 
@@ -27,6 +36,48 @@ function shuffle<T>(items: T[]) {
 
 function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function buildBubbleLayout(total: number, level: number) {
+  const columns = total > 8 ? 4 : total > 5 ? 3 : 2;
+  const rows = Math.ceil(total / columns);
+  const cellWidth = 100 / columns;
+  const cellHeight = 100 / rows;
+  const speedTier = Math.floor(level / 3);
+  const speedMultiplier = 1 + speedTier * 0.18;
+  return shuffle(Array.from({ length: rows * columns }, (_, i) => i))
+    .slice(0, total)
+    .map((cell) => {
+      const row = Math.floor(cell / columns);
+      const col = cell % columns;
+
+      return {
+        left: clamp((col + 0.5) * cellWidth + randomInt(-8, 8), 10, 90),
+        top: clamp((row + 0.5) * cellHeight + randomInt(-8, 8), 10, 88),
+        size: randomInt(68, 98),
+        driftX: randomInt(-18, 18),
+        driftY: randomInt(-14, 14),
+        duration: Number((randomInt(5, 9) / speedMultiplier).toFixed(2)),
+        delay: Number((Math.random() * -6).toFixed(2)),
+      };
+    });
+}
+
+function makeDecoyNumber(existing: Set<string>, maxValue: number) {
+  let candidate = randomInt(0, Math.max(maxValue, 12));
+  let attempts = 0;
+
+  while (existing.has(String(candidate)) && attempts < 20) {
+    candidate = randomInt(0, Math.max(maxValue, 12));
+    attempts += 1;
+  }
+
+  existing.add(String(candidate));
+  return String(candidate);
 }
 
 function buildRound(difficulty: Difficulty, level: number): RoundState {
@@ -77,16 +128,39 @@ function buildRound(difficulty: Difficulty, level: number): RoundState {
     kind: /^[0-9]+$/.test(p) ? "number" : "operator"
   })));
 
-  return { target, tokens, solution };
+  const existingNumberValues = new Set(
+    tokens.filter(token => token.kind === "number").map(token => token.text)
+  );
+  const extraChoices = tokenCount === 3 ? 6 : tokenCount === 5 ? 5 : 4;
+  const bubbleLayout = buildBubbleLayout(tokenCount + extraChoices, level);
+  const choices: BubbleChoice[] = tokens.map((token, index) => ({
+    ...token,
+    ...bubbleLayout[index]
+  }));
+
+  for (let i = 0; i < extraChoices; i += 1) {
+    const value = makeDecoyNumber(existingNumberValues, target + 12 + level * 2);
+    const token: Token = {
+      id: `decoy-${level}-${i}-${value}`,
+      text: value,
+      kind: "number"
+    };
+
+    choices.push({
+      ...token,
+      ...bubbleLayout[tokenCount + i]
+    });
+  }
+
+  return { target, tokens, choices: shuffle(choices), solution };
 }
 
 export default function NumberScrambler() {
-  const { updateProgress } = useAuth();
   const { triggerPrompt } = useMeaningfulSuccessPrompt();
-  const { trackStart, trackWin, trackGameOver } = useGameRunAnalytics();
+  const { trackStart } = useGameRunAnalytics();
 
   const [phase, setPhase] = useState<GamePhase>("start");
-  const [difficulty, setDifficulty] = useState<Difficulty>("easy");
+  const difficulty: Difficulty = "easy";
   const [level, setLevel] = useState(0);
   const [score, setScore] = useState(0);
   const [coins, setCoins] = useState(0);
@@ -139,7 +213,6 @@ export default function NumberScrambler() {
       // Check answer
       const expression = nextPlaced.map(t => t.text).join(" ");
       try {
-        // eslint-disable-next-line no-new-func
         const result = new Function(`return ${expression}`)();
         if (result === round.target) {
           nextLevel();
@@ -161,8 +234,8 @@ export default function NumberScrambler() {
   };
 
   const pool = useMemo(() => {
-    return round.tokens.filter(t => !placed.some(p => p.id === t.id));
-  }, [round.tokens, placed]);
+    return round.choices.filter(t => !placed.some(p => p.id === t.id));
+  }, [round.choices, placed]);
 
   return (
     <div className="overflow-hidden rounded-[2.5rem] border border-white/20 bg-slate-950/40 p-4 text-white shadow-2xl backdrop-blur-xl md:p-8">
@@ -219,7 +292,7 @@ export default function NumberScrambler() {
 
                 {/* Placed Equation Area */}
                 <div className="flex justify-center gap-3 min-h-[80px] mb-12 items-center relative z-10">
-                    {placed.map((token, i) => (
+                    {placed.map((token) => (
                         <div 
                             key={token.id}
                             className={`flex items-center justify-center min-w-[60px] h-[60px] rounded-2xl border-2 font-black text-2xl shadow-lg animate-in fade-in zoom-in duration-300 
@@ -238,22 +311,50 @@ export default function NumberScrambler() {
                 </div>
 
                 {/* Bubble Bank */}
-                <div className="flex flex-wrap justify-center gap-6 relative z-10 px-4">
-                    {pool.map((token, i) => (
-                        <button
+                <div className="relative z-10 mx-auto h-[320px] w-full max-w-5xl px-2 sm:px-4">
+                    {pool.map((token) => (
+                        <div
                             key={token.id}
-                            onClick={() => placeToken(token)}
-                            className={`w-20 h-20 md:w-24 md:h-24 rounded-full border-2 flex items-center justify-center text-2xl md:text-3xl font-black transition-all hover:scale-110 active:scale-90 group relative animate-bubble-float
-                                ${token.kind === "number" ? "bg-gradient-to-br from-blue-500/80 to-cyan-400/80 border-cyan-300/50 shadow-cyan-900/30" : "bg-gradient-to-br from-slate-600 to-slate-800 border-white/30 shadow-black/30"}
-                            `}
-                            style={{
-                                animationDelay: `${i * 0.4}s`
-                            }}
+                            className="bubble-choice absolute"
+                            style={
+                              {
+                                left: `${token.left}%`,
+                                top: `${token.top}%`,
+                                width: `${token.size}px`,
+                                height: `${token.size}px`,
+                                ['--bubble-duration' as string]: `${token.duration}s`,
+                                ['--bubble-delay' as string]: `${token.delay}s`,
+                                ['--drift-x' as string]: `${token.driftX}`,
+                                ['--drift-y' as string]: `${token.driftY}`,
+                              } as React.CSSProperties
+                            }
                         >
-                            {/* Reflex highlight */}
-                            <div className="absolute top-2 left-4 w-4 h-2 bg-white/30 rounded-full blur-[1px]"></div>
-                            <span className="drop-shadow-lg">{token.text}</span>
-                        </button>
+                            <button
+                                onClick={() => placeToken(token)}
+                                className={`relative flex h-full w-full items-center justify-center rounded-full border-2 text-2xl md:text-3xl font-black transition-all hover:scale-110 active:scale-90 group animate-bubble-float
+                                    ${token.kind === "number"
+                                      ? "bg-gradient-to-br from-blue-500/80 via-cyan-400/75 to-sky-300/70 border-cyan-200/50 shadow-cyan-900/30"
+                                      : "bg-gradient-to-br from-slate-600 to-slate-800 border-white/30 shadow-black/30"}
+                                `}
+                                style={{
+                                  animationDelay: `${token.delay}s`,
+                                  animationDuration: `${token.duration}s`,
+                                }}
+                                aria-label={`Place ${token.text}`}
+                            >
+                                <div
+                                  className="absolute inset-0 rounded-full opacity-90"
+                                  style={{
+                                    transform: `translate(${token.driftX * 0.04}px, ${token.driftY * 0.04}px)`,
+                                    boxShadow: token.kind === "number"
+                                      ? "inset 0 0 24px rgba(255,255,255,0.15)"
+                                      : "inset 0 0 24px rgba(255,255,255,0.08)",
+                                  }}
+                                />
+                                <div className="absolute top-2 left-4 h-2 w-4 rounded-full bg-white/30 blur-[1px]" />
+                                <span className="relative z-10 drop-shadow-lg">{token.text}</span>
+                            </button>
+                        </div>
                     ))}
                 </div>
 
@@ -269,6 +370,25 @@ export default function NumberScrambler() {
             </>
         )}
       </div>
+      <style jsx>{`
+        .bubble-choice {
+          animation: bubbleDrift var(--bubble-duration) ease-in-out infinite;
+          animation-delay: var(--bubble-delay);
+          will-change: transform;
+        }
+
+        @keyframes bubbleDrift {
+          0%, 100% {
+            transform: translate(-50%, -50%) translate3d(0, 0, 0) rotate(0deg);
+          }
+          33% {
+            transform: translate(-50%, -50%) translate3d(calc(var(--drift-x) * 1px), calc(var(--drift-y) * -0.5px), 0) rotate(2deg);
+          }
+          66% {
+            transform: translate(-50%, -50%) translate3d(calc(var(--drift-x) * -0.8px), calc(var(--drift-y) * 1px), 0) rotate(-2deg);
+          }
+        }
+      `}</style>
     </div>
   );
 }

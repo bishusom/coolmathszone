@@ -127,106 +127,157 @@ export default async function GradePage({ params }: PageProps) {
   return (
     <PageContainer>
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Link href="/" className="inline-block mb-6">
-            <MagicButton className="text-lg">
-              𓇼 Back to Math Adventures
-            </MagicButton>
-          </Link>
-          
-          <div className="flex items-center justify-center mb-6">
-            <span className="text-6xl mr-4">{gradeLevel.icon}</span>
-            <div>
-              <h1 className="text-5xl font-black text-white mb-2">{gradeLevel.title}</h1>
-              <div className={`w-32 h-2 bg-gradient-to-r ${gradeColors[gradeLevel.id] || 'from-blue-500 to-purple-500'} rounded-full mx-auto`}></div>
+        {/* Compact Header */}
+        <div className="flex flex-col md:flex-row items-center gap-8 mb-12 bg-white/10 p-8 rounded-3xl backdrop-blur-sm border border-white/20">
+          <div className="flex-shrink-0 text-center">
+            <Link href="/grades" className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-black/20 text-white hover:bg-black/40 transition-all border border-white/10 text-sm font-bold">
+              <span>←</span> Back to All Grades
+            </Link>
+            <div className="text-8xl md:text-9xl filter drop-shadow-lg animate-float">
+              {gradeLevel.icon}
             </div>
           </div>
           
-          <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-            {gradeLevel.description}
-          </p>
+          <div className="flex-1 text-center md:text-left">
+            <h1 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tight">
+              {gradeLevel.title}
+            </h1>
+            <div className={`w-32 h-2 bg-gradient-to-r ${gradeColors[gradeLevel.id] || 'from-blue-500 to-purple-500'} rounded-full mb-6 mx-auto md:mx-0`}></div>
+            <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl font-medium">
+              {gradeLevel.description} Dive into {gradeLevel.topics.length} specialized math topics designed for success.
+            </p>
+          </div>
         </div>
 
-        {/* Rest of your existing component remains the same */}
-        {/* Topics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {gradeLevel.topics.map((topic) => (
-            <ContentCard 
-              key={topic.id} 
-              className="p-6 hover:bg-white/15 transition-all duration-300 transform hover:scale-105"
-            >
-              <div className="text-center h-full flex flex-col">
-                <div className="text-5xl mb-4">{topic.emoji}</div>
-                <h3 className="text-xl font-bold text-white mb-3">{topic.title}</h3>
-                <p className="text-white/70 mb-4 flex-grow">{topic.description}</p>
-                
-                {/* Difficulty Badge */}
-                <div className="mb-4">
-                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                    topic.difficulty === 'beginner' 
-                      ? 'bg-green-500/20 text-green-300' 
-                      : topic.difficulty === 'intermediate'
-                      ? 'bg-purple-500/20 text-white'
-                      : 'bg-red-500/20 text-yellow-300'
-                  }`}>
-                    {topic.difficulty.charAt(0).toUpperCase() + topic.difficulty.slice(1)}
-                  </span>
+        {/* Grade Curriculum Overview - Solving "Thin Content" */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <div className="lg:col-span-2">
+            <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+              <span>📖</span> What You'll Learn in {gradeLevel.title}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {gradeLevel.topics.slice(0, 6).map(topic => (
+                <div key={topic.id} className="bg-black/30 backdrop-blur-md p-5 rounded-2xl border border-white/20 shadow-inner group hover:bg-black/40 transition-colors">
+                  <h3 className="font-bold text-cyan-200 mb-1 flex items-center gap-2">
+                    <span className="text-lg">{topic.emoji}</span> {topic.title}
+                  </h3>
+                  <p className="text-white/80 text-sm leading-relaxed line-clamp-2">{topic.description}</p>
                 </div>
-                
-                <Link href={`/grades/${gradeLevel.id}/${topic.id}`} className="mt-auto">
-                  <MagicButton className="w-full text-sm py-3">
-                    Start Learning →
-                  </MagicButton>
-                </Link>
+              ))}
+            </div>
+          </div>
+          
+          <ContentCard className="p-6" variant="solid">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Grade Stats</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center border-b pb-2">
+                <span className="text-gray-500">Total Topics</span>
+                <span className="font-bold text-blue-600">{gradeLevel.topics.length}</span>
               </div>
-            </ContentCard>
-          ))}
+              <div className="flex justify-between items-center border-b pb-2">
+                <span className="text-gray-500">Skill Level</span>
+                <span className="font-bold text-teal-600">{gradeLevel.id === 'kindergarten' ? 'Introductory' : 'Developing'}</span>
+              </div>
+              <div className="flex justify-between items-center border-b pb-2">
+                <span className="text-gray-500">Target Age</span>
+                <span className="font-bold text-purple-600">{gradeLevel.age}+ Years</span>
+              </div>
+            </div>
+            <Link href="#topics-grid" className="block mt-6">
+              <MagicButton className="w-full">
+                Explore All Topics ↓
+              </MagicButton>
+            </Link>
+          </ContentCard>
+        </div>
+
+        {/* Topics Grid */}
+        <div id="topics-grid" className="scroll-mt-8">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-black text-white">Interactive <span className="text-cyan-300">Workshops</span></h2>
+            <div className="text-white/60 text-sm font-bold uppercase tracking-widest">
+              {gradeLevel.topics.length} Modules Available
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {gradeLevel.topics.map((topic) => (
+              <ContentCard 
+                key={topic.id} 
+                className="p-6 hover:bg-white/15 transition-all duration-300 transform hover:scale-105"
+              >
+                <div className="text-center h-full flex flex-col">
+                  <div className="text-5xl mb-4">{topic.emoji}</div>
+                  <h3 className="text-xl font-bold text-white mb-3">{topic.title}</h3>
+                  <p className="text-white/70 mb-4 flex-grow">{topic.description}</p>
+                  
+                  {/* Difficulty Badge */}
+                  <div className="mb-4">
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                      topic.difficulty === 'beginner' 
+                        ? 'bg-green-500/20 text-green-300' 
+                        : topic.difficulty === 'intermediate'
+                        ? 'bg-purple-500/20 text-white'
+                        : 'bg-red-500/20 text-yellow-300'
+                    }`}>
+                      {topic.difficulty.charAt(0).toUpperCase() + topic.difficulty.slice(1)}
+                    </span>
+                  </div>
+                  
+                  <Link href={`/grades/${gradeLevel.id}/${topic.id}`} className="mt-auto">
+                    <MagicButton className="w-full text-sm py-3">
+                      Start Learning →
+                    </MagicButton>
+                  </Link>
+                </div>
+              </ContentCard>
+            ))}
+          </div>
         </div>
 
         {/* Ad before end */}
-        <div className="mt-12">
+        <div className="mt-12 mb-12">
           <ResponsiveAd position="content" />
         </div>
 
-        {/* Quick Stats */}
-        <ContentCard className="p-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">Ready to Dive In?</h2>
-          <p className="text-white/70 text-lg mb-6">
-            Choose any topic above to start your math adventure, or try a random challenge!
-          </p>
-          <Link 
-            href={`/grades/${gradeLevel.id}/${
-              gradeLevel.topics[Math.floor(Math.random() * gradeLevel.topics.length)].id
-            }`}
-          >
-            <MagicButton className="text-lg">
-              🎲 Start Random Adventure
-            </MagicButton>
-          </Link>
-        </ContentCard>
+        {/* Quick Stats & Tips Re-styled for horizontal space */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <ContentCard className="p-8 text-center flex flex-col justify-center">
+            <h2 className="text-3xl font-bold text-white mb-4">Ready for a Challenge?</h2>
+            <p className="text-white/70 text-lg mb-6">
+              Not sure where to start? Let the sea currents decide your next math adventure!
+            </p>
+            <Link 
+              href={`/grades/${gradeLevel.id}/${
+                gradeLevel.topics[Math.floor(Math.random() * gradeLevel.topics.length)].id
+              }`}
+            >
+              <MagicButton className="text-lg px-8">
+                🎲 Random Adventure
+              </MagicButton>
+            </Link>
+          </ContentCard>
 
-        {/* Learning Tips */}
-        <ContentCard className="p-8 mt-8">
-          <h3 className="text-2xl font-bold text-white mb-4 text-center">🌟 Learning Tips</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div className="p-4">
-              <div className="text-3xl mb-2">🎯</div>
-              <h4 className="font-semibold text-white mb-2">Focus on One Topic</h4>
-              <p className="text-white/70 text-sm">Master each concept before moving to the next</p>
+          <ContentCard className="p-8">
+            <h3 className="text-2xl font-bold text-white mb-6 text-center">🌟 Success Tips</h3>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4 bg-black/20 p-4 rounded-xl border border-white/10">
+                <span className="text-3xl">🎯</span>
+                <div>
+                  <h4 className="font-bold text-white text-sm">Focus on Mastery</h4>
+                  <p className="text-white/70 text-xs">Finish one module before diving into the next.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 bg-black/20 p-4 rounded-xl border border-white/10">
+                <span className="text-3xl">⏱️</span>
+                <div>
+                  <h4 className="font-bold text-white text-sm">Consistent Practice</h4>
+                  <p className="text-white/70 text-xs">15 minutes a day builds unstoppable math skills.</p>
+                </div>
+              </div>
             </div>
-            <div className="p-4">
-              <div className="text-3xl mb-2">⏱️</div>
-              <h4 className="font-semibold text-white mb-2">Practice Daily</h4>
-              <p className="text-white/70 text-sm">Just 15 minutes a day builds strong math skills</p>
-            </div>
-            <div className="p-4">
-              <div className="text-3xl mb-2">🎉</div>
-              <h4 className="font-semibold text-white mb-2">Celebrate Progress</h4>
-              <p className="text-white/70 text-sm">Every correct answer is a step toward math mastery</p>
-            </div>
-          </div>
-        </ContentCard>
+          </ContentCard>
+        </div>
       </div>
     </PageContainer>
   );

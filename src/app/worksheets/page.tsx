@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Footer from '@/components/ui/Footer';
 import ResponsiveAd from '@/components/ResponsiveAd';

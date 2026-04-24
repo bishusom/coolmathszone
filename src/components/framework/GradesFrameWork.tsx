@@ -48,12 +48,14 @@ const EXERCISE_CONFIG = {
 // Exercise Completion Screen Component
 function ExerciseCompletionScreen({ 
   score, 
+  grade,
   onContinue, 
   onNewTopic, 
   onGoHome,
   config 
 }: {
   score: { correct: number; total: number };
+  grade: GradeLevelId;
   onContinue: () => void;
   onNewTopic: () => void;
   onGoHome: () => void;
@@ -525,6 +527,7 @@ export default function GradesFramework({
               {showCompletion ? (
                 <ExerciseCompletionScreen
                   score={{ correct: score, total: exercises.length }}
+                  grade={grade}
                   onContinue={handleContinue}
                   onNewTopic={handleNewTopic}
                   onGoHome={handleGoHome}

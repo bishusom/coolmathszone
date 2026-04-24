@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <Layout>
       {/* Deepened Sunlit Ocean Hero Section */}
-      <section className="relative py-6 bg-gradient-to-b from-cyan-300 to-blue-400 text-teal-950 overflow-hidden">
+      <section className="relative py-4 md:py-5 bg-gradient-to-b from-cyan-300 to-blue-400 text-teal-950 overflow-hidden">
         {/* Sunrays */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute -top-32 left-1/4 w-32 h-[150%] bg-white/20 animate-sunray blur-2xl origin-top"></div>
@@ -82,13 +82,16 @@ export default function Home() {
         </div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl font-black mb-3 drop-shadow-sm">
-            Unlock the Magic of Maths in the <span className="text-blue-600">Coral Kingdom!</span>
-          </h1>
-          <p className="text-lg text-teal-800 mb-5 max-w-2xl mx-auto font-medium">
-            Making maths magical from Kindergarten to 8th grade
+          <p className="text-sm md:text-base text-teal-900/80 mb-2 font-black uppercase tracking-wider">
+            Cool Maths Zone
           </p>
-          <div className="flex justify-center gap-3">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 drop-shadow-sm leading-tight max-w-4xl mx-auto">
+            Cool Maths Zone: Fun Math Games in the <span className="text-blue-600">Coral Kingdom!</span>
+          </h1>
+          <p className="text-base md:text-lg text-teal-800 mb-4 max-w-2xl mx-auto font-medium">
+            Play cool math games, practise maths skills, and explore lessons from Kindergarten to 8th grade.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
             <Link href="/grades">
               <button className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-orange-500/30 transition-all hover:scale-105 border border-amber-300/50">
                 <span>🌟</span> Start Your Adventure!
@@ -103,15 +106,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ad after Hero Section */}
-      <section className="py-4 bg-gradient-to-r from-blue-400 to-cyan-300">
-        <div className="container mx-auto px-4">
-          <ResponsiveAd position="hero" />
-        </div>
-      </section>
-
       {/* The Coral Bento Hub */}
-      <section className="py-12 bg-gradient-to-b from-blue-400 via-cyan-200 to-blue-100 relative overflow-hidden">
+      <section className="py-6 md:py-8 bg-gradient-to-b from-blue-400 via-cyan-200 to-blue-100 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none opacity-50">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-32 -translate-y-32"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-32 translate-y-32"></div>
@@ -120,50 +116,47 @@ export default function Home() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 auto-rows-[minmax(200px,auto)]">
-
-              {/* Featured Games (Stacked) */}
-              <div className="lg:col-span-2 lg:row-span-2 flex flex-col gap-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-black text-slate-800">Featured Games</h3>
-                  <Link href="/games" className="text-sm font-bold text-blue-600 hover:text-blue-700 underline underline-offset-4">
-                    All Games →
+              {/* Featured Games (Stacked in Card) */}
+              <div className="lg:col-span-2 lg:row-span-2 rounded-[2.5rem] border-2 border-white/70 bg-black/5 backdrop-blur-md p-8 shadow-xl flex flex-col gap-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-black text-slate-900">Featured Games</h3>
+                  <Link href="/games" className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white shadow-md shadow-blue-500/20 transition-all hover:bg-blue-700 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
+                    All Games
                   </Link>
                 </div>
-
-                {/* Game 1 */}
-                <div className="flex-1 relative group overflow-hidden rounded-[2.5rem] border-2 border-white/70 shadow-xl bg-white/50 backdrop-blur-md text-blue-950 p-6 hover:bg-white/60 transition-colors">
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-300/30 rounded-full blur-3xl -translate-y-16 translate-x-16 transition-transform group-hover:scale-110"></div>
-                  <div className="relative z-10 h-full flex items-center gap-6">
-                    <div className="text-5xl transform transition-transform group-hover:scale-110 group-hover:rotate-12 duration-500 select-none shrink-0">
-                      🎱
-                    </div>
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-black mb-2">Equation Billiards</h3>
-                      <p className="text-sm text-teal-800 mb-4 line-clamp-2 font-medium">Track rebounding answer balls while solving roots and algebra!</p>
-                      <Link href="/games/equation-billiards">
-                        <button className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-md">
-                          Play Now →
-                        </button>
-                      </Link>
+                
+                <div className="flex flex-col gap-4 flex-grow">
+                  {/* Game 1 */}
+                  <div className="flex-1 relative group overflow-hidden rounded-3xl border border-white/50 shadow-lg bg-white/40 backdrop-blur-sm text-blue-950 p-6 hover:bg-white/60 transition-all hover:scale-[1.02]">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-300/20 rounded-full blur-2xl -translate-y-8 translate-x-8"></div>
+                    <div className="relative z-10 flex items-center gap-6">
+                      <div className="text-5xl shrink-0 group-hover:rotate-12 transition-transform duration-500">🎱</div>
+                      <div>
+                        <h3 className="text-xl font-black mb-1">Equation Billiards</h3>
+                        <p className="text-xs text-teal-900/80 mb-3 font-medium line-clamp-1">Solve roots and algebra with rebounding balls!</p>
+                        <Link href="/games/equation-billiards">
+                          <button className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-4 py-1.5 rounded-lg font-bold text-xs shadow-md hover:shadow-lg transition-all">
+                            Play Now
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Game 2 */}
-                <div className="flex-1 relative group overflow-hidden rounded-[2.5rem] border-2 border-white/70 shadow-xl bg-white/50 backdrop-blur-md text-purple-950 p-6 hover:bg-white/60 transition-colors">
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-fuchsia-300/30 rounded-full blur-3xl -translate-y-16 translate-x-16 transition-transform group-hover:scale-110"></div>
-                  <div className="relative z-10 h-full flex items-center gap-6">
-                    <div className="text-5xl transform transition-transform group-hover:scale-110 group-hover:rotate-12 duration-500 select-none shrink-0">
-                      🔢
-                    </div>
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-black mb-2">Math Popper</h3>
-                      <p className="text-sm text-fuchsia-900/80 mb-4 line-clamp-2 font-medium">Pop the right answers before the board speeds up!</p>
-                      <Link href="/games/math-popper">
-                        <button className="bg-gradient-to-r from-fuchsia-400 to-purple-500 hover:from-fuchsia-500 hover:to-purple-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-md">
-                          Play Now →
-                        </button>
-                      </Link>
+                  {/* Game 2 */}
+                  <div className="flex-1 relative group overflow-hidden rounded-3xl border border-white/50 shadow-lg bg-white/40 backdrop-blur-sm text-purple-950 p-6 hover:bg-white/60 transition-all hover:scale-[1.02]">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-fuchsia-300/20 rounded-full blur-2xl -translate-y-8 translate-x-8"></div>
+                    <div className="relative z-10 flex items-center gap-6">
+                      <div className="text-5xl shrink-0 group-hover:rotate-12 transition-transform duration-500">🔢</div>
+                      <div>
+                        <h3 className="text-xl font-black mb-1">Math Popper</h3>
+                        <p className="text-xs text-fuchsia-900/80 mb-3 font-medium line-clamp-1">Pop answers before the board speeds up!</p>
+                        <Link href="/games/math-popper">
+                          <button className="bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white px-4 py-1.5 rounded-lg font-bold text-xs shadow-md hover:shadow-lg transition-all">
+                            Play Now
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -173,8 +166,8 @@ export default function Home() {
               <div className="lg:col-span-2 lg:row-span-1 rounded-[2.5rem] border-2 border-white/70 bg-white/70 backdrop-blur-md p-8 shadow-xl">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-black text-teal-900">Explore Grades</h3>
-                  <Link href="/grades" className="text-sm font-bold text-cyan-600 hover:text-cyan-700 underline underline-offset-4">
-                    View All Grades →
+                  <Link href="/grades" className="inline-flex items-center justify-center rounded-lg bg-cyan-600 px-4 py-2 text-sm font-bold text-white shadow-md shadow-cyan-500/20 transition-all hover:bg-cyan-700 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-700">
+                    All Grades
                   </Link>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -190,8 +183,8 @@ export default function Home() {
                     </Link>
                   ))}
                   <div className="sm:hidden col-span-2">
-                    <Link href="/grades" className="flex items-center justify-center p-4 rounded-2xl bg-cyan-100 border border-cyan-200 text-teal-800 font-black text-sm shadow-sm hover:bg-cyan-200 transition-colors">
-                      View All Grades
+                    <Link href="/grades" className="flex items-center justify-center p-4 rounded-2xl bg-cyan-600 border border-cyan-500 text-white font-black text-sm shadow-md shadow-cyan-500/20 hover:bg-cyan-700 transition-colors">
+                      All Grades
                     </Link>
                   </div>
                 </div>
@@ -224,6 +217,13 @@ export default function Home() {
 
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Ad after primary homepage content */}
+      <section className="py-4 bg-blue-100">
+        <div className="container mx-auto px-4">
+          <ResponsiveAd position="hero" />
         </div>
       </section>
 

@@ -1,8 +1,15 @@
+import type { Metadata } from 'next';
 import { getGradeLevel, getTopicsByGrade } from '@/utils/gradeHelpers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
 import { getMetadataAlternates, getCanonicalUrl } from '@/utils/seo';
+
+interface PageProps {
+  params: Promise<{
+    grade: string;
+  }>;
+}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { grade } = await params;

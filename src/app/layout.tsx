@@ -19,15 +19,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://coolmathszone.com'),
   title: 'Cool Maths Zone | Fun Math Games and Learning Resources for Kids',
-  description: 'Cool Maths Zone - Fun math games and educational resources for all ages! Enjoy interactive number games, arithmetic challenges, math worksheets, and learning guides. Perfect for kindergarten to middle & secondary school students learning mathematics.',
-  keywords:  'cool math games, fun math games, math learning, math worksheets, number games, math puzzles, arithmetic games, algebra games, kids math games, math education',
+  description: 'Cool Maths Zone - also searched as Cool Math Zone and CoolMathZone - offers fun math games, worksheets, and learning resources for kindergarten to 8th grade.',
+  keywords:  'cool maths, cool math, cool maths zone, cool math zone, coolmathzone, coolmathszone, cool math games, fun math games, math learning, math worksheets, number games, math puzzles, arithmetic games, algebra games, kids math games, math education',
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
     title: 'Cool Maths Zone | Fun Math Games and Learning Resources for Kids',
-    description: 'Cool Maths Zone - Fun math games and educational resources for all ages! Enjoy interactive number games, arithmetic challenges, math worksheets, and learning guides. Perfect for kindergarten to middle & secondary school students learning mathematics.',
+    description: 'Cool Maths Zone - also searched as Cool Math Zone and CoolMathZone - offers fun math games, worksheets, and learning resources for kindergarten to 8th grade.',
     url: 'https://coolmathszone.com',
     siteName: 'Cool Maths Zone',
     images: [
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Cool Maths Zone | Fun Math Games and Learning Resources for Kids',
-    description: 'Cool Maths Zone - Fun math games and educational resources for all ages! Enjoy interactive number games, arithmetic challenges, math worksheets, and learning guides. Perfect for kindergarten to middle & secondary school students learning mathematics.',
+    description: 'Cool Maths Zone - also searched as Cool Math Zone and CoolMathZone - offers fun math games, worksheets, and learning resources for kindergarten to 8th grade.',
     images: ['https://coolmathszone.com/cmz-og.png'],
   },
   alternates: {
@@ -65,6 +65,7 @@ const structuredData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       "name": "Cool Maths Zone",
+      "alternateName": ["Cool Math Zone", "CoolMathZone", "CoolMathsZone"],
       "url": `${siteUrl}/`,
       "description": "Fun math games and learning resources for kids.",
       "publisher": {
@@ -75,6 +76,7 @@ const structuredData = {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
       "name": "Cool Maths Zone",
+      "alternateName": ["Cool Math Zone", "CoolMathZone", "CoolMathsZone"],
       "url": `${siteUrl}/`,
       "logo": {
         "@type": "ImageObject",

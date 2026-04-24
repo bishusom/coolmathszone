@@ -3,11 +3,23 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { generateWorksheetProblems } from '@/utils/worksheetGenerator';
 import WorksheetPreview from '@/components/worksheets/WorksheetPreview';
-import DownloadWorksheet from '@/components/worksheets/DownloadWorksheet';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
 import { getTopicsByGrade } from '@/utils/gradeHelpers';
+
+const DownloadWorksheet = dynamic(
+  () => import('@/components/worksheets/DownloadWorksheet'),
+  {
+    ssr: false,
+    loading: () => (
+      <MagicButton disabled className="w-full text-lg bg-gradient-to-r from-gray-600 to-gray-700">
+        Preparing PDF tools...
+      </MagicButton>
+    ),
+  }
+);
 
 interface TopicWorksheetClientProps {
   grade: string;

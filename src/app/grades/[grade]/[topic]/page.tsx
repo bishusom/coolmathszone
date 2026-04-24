@@ -53,6 +53,8 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+import { getMetadataAlternates } from '@/utils/seo';
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { grade, topic } = await params;
 
@@ -63,6 +65,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: 'Topic Not Found'
     };
   }
+
+  // Breadcrumb Schema
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': 'https://coolmathszone.com'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Grades',
+        'item': 'https://coolmathszone.com/grades'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': gradeLevel.title,
+        'item': `https://coolmathszone.com/grades/${gradeLevel.id}`
+      },
+      {
+        '@type': 'ListItem',
+        'position': 4,
+        'name': topicData.title,
+        'item': `https://coolmathszone.com/grades/${gradeLevel.id}/${topicData.id}`
+      }
+    ]
+  };
 
   // Enhanced FAQ Schema for topic page
   const faqSchema = {
@@ -123,11 +157,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${topicData.title} - ${gradeLevel.title} | CoolMathsZone`,
     description: concept?.learning_goal || topicData.description || `Practice ${topicData.title} with interactive exercises for ${gradeLevel.title} students.`,
-    alternates: {
-      canonical: `https://coolmathszone.com/grades/${gradeLevel.id}/${topicData.id}`,
-    },
+    alternates: getMetadataAlternates(`grades/${gradeLevel.id}/${topicData.id}`),
     other: {
-      'script:ld+json': JSON.stringify(faqSchema)
+      'script:ld+json': [
+        JSON.stringify(breadcrumbSchema),
+        JSON.stringify(faqSchema)
+      ]
     }
   };
 }

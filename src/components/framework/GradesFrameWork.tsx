@@ -114,7 +114,7 @@ function ExerciseCompletionScreen({
         >
           🔄 Practice Again
         </MagicButton>
-        <Link href={`/grades/${config.title.toLowerCase().replace(' ', '')}`}>
+        <Link href={`/grades/${grade}`}>
           <MagicButton>
             🥟 Try Another Topic
           </MagicButton>

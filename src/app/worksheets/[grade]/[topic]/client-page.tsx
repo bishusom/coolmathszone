@@ -7,6 +7,7 @@ import { generateWorksheetProblems } from '@/utils/worksheetGenerator';
 import WorksheetPreview from '@/components/worksheets/WorksheetPreview';
 import DownloadWorksheet from '@/components/worksheets/DownloadWorksheet';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
+import { getTopicsByGrade } from '@/utils/gradeHelpers';
 
 interface TopicWorksheetClientProps {
   grade: string;
@@ -38,6 +39,10 @@ export default function TopicWorksheetClient({
       setIsGenerating(false);
     }
   };
+
+  const otherTopics = getTopicsByGrade(grade)
+    .filter(t => t.id !== topic)
+    .slice(0, 6);
 
   // Transform problems for PDF format
   const pdfProblems = worksheet.map(problem => ({
@@ -140,31 +145,20 @@ export default function TopicWorksheetClient({
         />
 
         {/* Quick Navigation */}
-        <ContentCard className="p-6 mt-8">
-          <h3 className="text-xl font-bold text-white mb-4 text-center">More Worksheets</h3>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link href={`/worksheets/${grade}/addition`}>
-              <MagicButton className="text-sm bg-gradient-to-r from-blue-600 to-cyan-600">
-                ➕ Addition
-              </MagicButton>
-            </Link>
-            <Link href={`/worksheets/${grade}/subtraction`}>
-              <MagicButton className="text-sm bg-gradient-to-r from-green-600 to-emerald-600">
-                ➖ Subtraction
-              </MagicButton>
-            </Link>
-            <Link href={`/worksheets/${grade}/multiplication`}>
-              <MagicButton className="text-sm bg-gradient-to-r from-orange-600 to-red-600">
-                ✖️ Multiplication
-              </MagicButton>
-            </Link>
-            <Link href={`/worksheets/${grade}/division`}>
-              <MagicButton className="text-sm bg-gradient-to-r from-purple-600 to-pink-600">
-                ➗ Division
-              </MagicButton>
-            </Link>
-          </div>
-        </ContentCard>
+        {otherTopics.length > 0 && (
+          <ContentCard className="p-6 mt-8">
+            <h3 className="text-xl font-bold text-white mb-4 text-center">More {gradeDisplay} Worksheets</h3>
+            <div className="flex flex-wrap justify-center gap-3">
+              {otherTopics.map(t => (
+                <Link key={t.id} href={`/worksheets/${grade}/${t.id}`}>
+                  <MagicButton className="text-sm">
+                    {t.emoji} {t.title}
+                  </MagicButton>
+                </Link>
+              ))}
+            </div>
+          </ContentCard>
+        )}
       </div>
     </PageContainer>
   );

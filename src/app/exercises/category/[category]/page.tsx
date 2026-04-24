@@ -32,6 +32,8 @@ const categoryMap: { [key: string]: string } = {
   'problem-solving': 'problem-solving'
 };
 
+import { getMetadataAlternates } from '@/utils/seo';
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category } = await params;
   const actualCategory = categoryMap[category];
@@ -56,6 +58,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const gradeLevelsCount = gradeLevelsWithCategory.length;
   
   const difficultyLevels = Array.from(new Set(categoryTopics.map(t => t.difficulty)));
+
+  // Breadcrumb Schema
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': 'https://coolmathszone.com'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Exercises',
+        'item': 'https://coolmathszone.com/exercises'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': categoryName,
+        'item': `https://coolmathszone.com/exercises/category/${actualCategory.toLowerCase()}`
+      }
+    ]
+  };
 
   // FAQ Schema for category page
   const faqSchema = {
@@ -132,11 +160,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${categoryName} Exercises | CoolMathsZone`,
     description: `Math exercises for ${categoryName} across all grade levels. ${categoryTopics.length} interactive exercises available for ${gradeLevelsCount} grade levels.`,
-    alternates: {
-      canonical: `https://coolmathszone.com/exercises/category/${categoryName.toLowerCase()}`
-    },
+    alternates: getMetadataAlternates(`exercises/category/${actualCategory.toLowerCase()}`),
     other: {
-      'script:ld+json': JSON.stringify(faqSchema)
+      'script:ld+json': [
+        JSON.stringify(breadcrumbSchema),
+        JSON.stringify(faqSchema)
+      ]
     }
   };
 }

@@ -1,12 +1,7 @@
 // app/contact/layout.tsx
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Worksheets | CoolMathsZone',
-  description: 'Printable math worksheets for all grade levels. Practice addition, subtraction, multiplication, division and more.',
-};
-
-export default function ContactLayout({
+export default function WorksheetsLayout({
   children,
 }: {
   children: React.ReactNode;

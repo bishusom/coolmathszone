@@ -11,7 +11,10 @@ interface PageProps {
   }>;
 }
 
+import { getMetadataAlternates, getCanonicalUrl } from '@/utils/seo';
+
 function formatTopic(topic: string) {
+  if (!topic) return '';
   return topic
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -27,13 +30,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: {
-      canonical: `https://coolmathszone.com/worksheets/${grade}/${topic}`,
-    },
+    alternates: getMetadataAlternates(`worksheets/${grade}/${topic}`),
     openGraph: {
       title,
       description,
-      url: `https://coolmathszone.com/worksheets/${grade}/${topic}`,
+      url: getCanonicalUrl(`worksheets/${grade}/${topic}`),
     },
   };
 }

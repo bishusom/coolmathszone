@@ -2,13 +2,7 @@ import { getGradeLevel, getTopicsByGrade } from '@/utils/gradeHelpers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PageContainer, ContentCard, MagicButton } from '@/components/ui/PageContainer';
-import type { Metadata } from 'next';
-
-interface PageProps {
-  params: {
-    grade: string;
-  };
-}
+import { getMetadataAlternates, getCanonicalUrl } from '@/utils/seo';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { grade } = await params;
@@ -24,13 +18,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: {
-      canonical: `https://coolmathszone.com/worksheets/${grade}`,
-    },
+    alternates: getMetadataAlternates(`worksheets/${grade}`),
     openGraph: {
       title,
       description,
-      url: `https://coolmathszone.com/worksheets/${grade}`,
+      url: getCanonicalUrl(`worksheets/${grade}`),
     },
   };
 }

@@ -81,7 +81,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Grade level pages
   const gradeRoutes = gradeLevels.map((grade): MetadataRoute.Sitemap[0] => ({
-    url: `${baseUrl}/grades/${grade.id}`,
+    url: `${baseUrl}/grades/${grade.id.toLowerCase()}`,
     lastModified: currentDate,
     changeFrequency: 'monthly' as const,
     priority: 0.9,
@@ -90,7 +90,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Topic pages for each grade (only include if these routes exist)
   const topicRoutes = gradeLevels.flatMap((grade): MetadataRoute.Sitemap => 
     grade.topics.map((topic): MetadataRoute.Sitemap[0] => ({
-      url: `${baseUrl}/grades/${grade.id}/${topic.id}`,
+      url: `${baseUrl}/grades/${grade.id.toLowerCase()}/${topic.id.toLowerCase()}`,
       lastModified: currentDate,
       changeFrequency: 'monthly' as const,
       priority: 0.8,
@@ -107,7 +107,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Worksheet pages
   const worksheetGradeRoutes = gradeLevels.map((grade): MetadataRoute.Sitemap[0] => ({
-    url: `${baseUrl}/worksheets/${grade.id}`,
+    url: `${baseUrl}/worksheets/${grade.id.toLowerCase()}`,
     lastModified: currentDate,
     changeFrequency: 'monthly' as const,
     priority: 0.7,
@@ -115,7 +115,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const worksheetTopicRoutes = gradeLevels.flatMap((grade): MetadataRoute.Sitemap => 
     grade.topics.map((topic): MetadataRoute.Sitemap[0] => ({
-      url: `${baseUrl}/worksheets/${grade.id}/${topic.id}`,
+      url: `${baseUrl}/worksheets/${grade.id.toLowerCase()}/${topic.id.toLowerCase()}`,
       lastModified: currentDate,
       changeFrequency: 'monthly' as const,
       priority: 0.6,

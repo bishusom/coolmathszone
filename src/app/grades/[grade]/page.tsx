@@ -25,6 +25,8 @@ const gradeColors: { [key: string]: string } = {
   grade8: 'from-purple-500 to-indigo-500'
 };
 
+import { getMetadataAlternates } from '@/utils/seo';
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { grade } = await params;
   const gradeLevel = getGradeLevel(grade);
@@ -34,6 +36,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: 'Grade Not Found | CoolMathsZone'
     };
   }
+
+  // Breadcrumb Schema
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': 'https://coolmathszone.com'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Grades',
+        'item': 'https://coolmathszone.com/grades'
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': gradeLevel.title,
+        'item': `https://coolmathszone.com/grades/${gradeLevel.id}`
+      }
+    ]
+  };
 
   // FAQ Schema for the grade page
   const faqSchema = {
@@ -78,11 +106,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${gradeLevel.title} | CoolMathsZone`,
     description: gradeLevel.description,
-    alternates: {
-      canonical: `https://coolmathszone.com/grades/${gradeLevel.id}`,
-    },
+    alternates: getMetadataAlternates(`grades/${gradeLevel.id}`),
     other: {
-      'script:ld+json': JSON.stringify(faqSchema)
+      'script:ld+json': [
+        JSON.stringify(breadcrumbSchema),
+        JSON.stringify(faqSchema)
+      ]
     }
   };
 }

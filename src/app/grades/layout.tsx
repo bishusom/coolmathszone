@@ -2,6 +2,8 @@
 import type { Metadata } from 'next';
 import { getAllGradeLevels } from '@/utils/gradeHelpers';
 
+import { getMetadataAlternates } from '@/utils/seo';
+
 export async function generateMetadata(): Promise<Metadata> {
   const allGrades = getAllGradeLevels();
   const totalTopics = allGrades.reduce((total, grade) => total + grade.topics.length, 0);
@@ -15,9 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: `Discover ${allGrades.length} grade levels with interactive math courses`,
       type: 'website',
     },
-    alternates: {
-        canonical: 'https://coolmathszone.com/grades'
-    }
+    alternates: getMetadataAlternates('grades'),
   };
 }
 

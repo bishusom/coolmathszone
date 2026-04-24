@@ -1,7 +1,7 @@
 // app/worksheets/[grade]/[topic]/client-page.tsx - UPDATED
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { generateWorksheetProblems } from '@/utils/worksheetGenerator';
@@ -39,12 +39,18 @@ export default function TopicWorksheetClient({
   const [worksheet, setWorksheet] = useState<any[]>(initialWorksheet);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState('');
+
+  useEffect(() => {
+    setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  }, []);
 
   const generateNewWorksheet = async () => {
     setIsGenerating(true);
     try {
       const problems = await generateWorksheetProblems(grade, topic);
       setWorksheet(problems);
+      setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     } catch (error) {
       console.error('Error generating worksheet:', error);
     } finally {
@@ -143,7 +149,7 @@ export default function TopicWorksheetClient({
             <span className="font-bold">{worksheet.length}</span> problems generated
           </div>
           <div className="text-sm text-white/70">
-            Last updated: {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            Last updated: {lastUpdated || 'Just now'}
           </div>
         </div>
 

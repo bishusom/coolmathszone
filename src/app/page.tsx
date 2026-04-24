@@ -93,7 +93,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link href="/grades">
-              <button className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-orange-500/30 transition-all hover:scale-105 border border-amber-300/50">
+              <button className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-700 hover:from-blue-950 hover:via-blue-800 hover:to-cyan-800 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-blue-900/30 transition-all hover:scale-105 border border-cyan-200/40">
                 <span>🌟</span> Start Your Adventure!
               </button>
             </Link>

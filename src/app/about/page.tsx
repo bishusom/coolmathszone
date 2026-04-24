@@ -64,7 +64,7 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             {/* Bishu Som */}
-            <ContentCard className="p-8 text-center variant=solid">
+            <ContentCard className="p-8 text-center" variant="dark">
               <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-4xl text-white">
                 👨‍💻
               </div>
@@ -88,7 +88,7 @@ export default function AboutPage() {
             </ContentCard>
 
             {/* Shubhang Som */}
-            <ContentCard className="p-8 text-center">
+            <ContentCard className="p-8 text-center" variant="dark">
               <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-green-400 to-emerald-400 rounded-full flex items-center justify-center text-4xl text-white">
                 🧮
               </div>
@@ -110,7 +110,7 @@ export default function AboutPage() {
       {/* Story Section */}
       <section className="py-16 bg-gradient-to-br from-blue-200 via-cyan-600 to-blue-600 text-white">
         <div className="container mx-auto px-4">
-          <ContentCard className="p-8 text-center">
+          <ContentCard className="p-8 text-center" variant="dark">
             <h2 className="text-3xl font-bold text-white mb-6">Our Story</h2>
             <div className="max-w-3xl mx-auto text-lg text-white/80 leading-relaxed">
               <p className="mb-6">
@@ -118,6 +118,25 @@ export default function AboutPage() {
               </p>
               <p className="mb-6">
                 What began as weekend experiments grew into a platform that combines structured grade-based learning, game-style practice, and optional profiles for players who want to save progress, coins, and cosmetics.
+              </p>
+              <p className="mb-6">
+                We also build playful brain-training experiences at{' '}
+                <a href="https://triviaah.com" className="text-cyan-200 font-semibold underline underline-offset-4 hover:text-white" target="_blank" rel="noopener noreferrer">
+                  Triviaah
+                </a>
+                , including{' '}
+                <a href="https://triviaah.com/number-puzzles" className="text-cyan-200 font-semibold underline underline-offset-4 hover:text-white" target="_blank" rel="noopener noreferrer">
+                  number puzzles
+                </a>
+                ,{' '}
+                <a href="https://triviaah.com/daily-trivias" className="text-cyan-200 font-semibold underline underline-offset-4 hover:text-white" target="_blank" rel="noopener noreferrer">
+                  daily trivia games
+                </a>
+                , and{' '}
+                <a href="https://triviaah.com/word-games" className="text-cyan-200 font-semibold underline underline-offset-4 hover:text-white" target="_blank" rel="noopener noreferrer">
+                  word games
+                </a>
+                {' '}for learners who enjoy quick challenges beyond math.
               </p>
               <p className="text-cyan-300 font-semibold">
                 Our mission: make math feel approachable, repeatable, and worth coming back to.
@@ -189,7 +208,7 @@ export default function AboutPage() {
       {/* Contact CTA */}
       <section className="py-16 bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 text-white">
         <div className="container mx-auto px-4">
-          <ContentCard className="p-8 text-center">
+          <ContentCard className="p-8 text-center" variant="dark">
             <h2 className="text-3xl font-bold text-white mb-4">Have Questions?</h2>
             <p className="text-white/70 text-lg mb-6 max-w-2xl mx-auto">
               We&apos;d love to hear from you! Whether you have feedback, found a bug, or just want to say hello, 
